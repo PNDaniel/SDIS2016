@@ -1,0 +1,5 @@
+# Ignore .idea configuration
+.idea/
+
+# Ignore project configuration
+sdis_tp1.iml
