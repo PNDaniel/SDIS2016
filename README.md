@@ -216,7 +216,7 @@ You will have the opportunity to evolve this service in the second project. (The
 
 ### Annex A: Interoperability
 
-Your implementation must interoperate with that of other students: we will test this. That is your service must be able to execute the four tasks mentioned in the previous point using only the messages in [Section 3](#Protocol). You should consider both the behavior as an initiator peer and otherwise. (Of course, if there are not enough remote peers implementing your enhancement, the corresponding enhanced protocol may fail.)
+Your implementation must interoperate with that of other students: we will test this. That is your service must be able to execute the four tasks mentioned in the previous point using only the messages in [Section 3](#protocol). You should consider both the behavior as an initiator peer and otherwise. (Of course, if there are not enough remote peers implementing your enhancement, the corresponding enhanced protocol may fail.)
 
 To avoid interference between the execution of non-interoperable implementations, a service must drop messages that it does not understand. This is a general rule of every protocol.
 
