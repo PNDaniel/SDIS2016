@@ -1,4 +1,4 @@
-# Ignore .idea configuration
+# Ignore IDEA's workspace configuration
 .idea/
 
 # Ignore project configuration
