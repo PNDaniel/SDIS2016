@@ -200,7 +200,7 @@ If possible, you should avoid changing or adding any message. If you find that t
 
 #### What and how to submit?
 
-You should submit all the source code files via the SVN repository of the Redmine project that you must create for SDIS. Your project id shall be named sdis1516-t<n>g<p><q> , where <n> is the number of your section (turma) and <p><q> are two digits with the number of your group, e.g. sdis1516-t3g06. In addition to the source code files, you should submit a plain ASCII file named _README_ with instructions for compiling and running your application.
+You should submit all the source code files via the SVN repository of the Redmine project that you must create for SDIS. Your project id shall be named sdis1516-t\<n>g\<p>\<q> , where \<n> is the number of your section (turma) and \<p>\<q> are two digits with the number of your group, e.g. sdis1516-t3g06. In addition to the source code files, you should submit a plain ASCII file named _README_ with instructions for compiling and running your application.
 
 Furthermore, if you have implemented any enhancement to the protocol specified in this document, you should submit also a report, a PDF file named protocol.pdf also via the SVN repository of your Redmine project. For each enhancement you have implemented, the protocol should include its specification and explain its rational. This should not be longer than one page per enhancement.
 
