@@ -27,15 +27,63 @@ public class MC extends Thread
 
     public void run()
     {
-        DatagramPacket receivePacket;
         byte[] buf = new byte[CHUNK_SIZE];
-        while(true) {
-            try (MulticastSocket mcSocket = new MulticastSocket(port))
-            {
+        try
+        {
+            DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, address, port);
+            mcSocket.send(sendPacket);
+            Thread.sleep(500);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try
+        {
+            DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
+            mcSocket.receive(receivePacket);
+
+            String msg = new String(buf, 0, buf.length);
+            System.out.println("Message received: " + msg);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    /*public void run()
+    {
+        byte[] buf = new byte[CHUNK_SIZE];
+        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+        send(packet);
+    }*/
+
+    /*public void send(DatagramPacket packet) throws InterruptedException {
+        try
+        {
+            mcSocket.send(packet);
+            Thread.sleep(500);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void receive()
+    {
+        try
+        {
+            byte[] buf = new byte[CHUNK_SIZE];
+            while(true)
+            {
+                DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                mcSocket.receive(packet);
+
+                String msg = new String(buf, 0, buf.length);
+                System.out.println("Message received: " + msg);
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    */
 }
