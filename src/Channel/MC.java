@@ -27,10 +27,11 @@ public class MC extends Thread
 
     public void run()
     {
-        byte[] buf = new byte[CHUNK_SIZE];
+        byte[] receiveBufffer = new byte[CHUNK_SIZE];
+        byte[] sendBufffer = new byte[CHUNK_SIZE];
         try
         {
-            DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, address, port);
+            DatagramPacket sendPacket = new DatagramPacket(sendBufffer, sendBufffer.length, address, port);
             mcSocket.send(sendPacket);
             Thread.sleep(500);
         } catch (IOException e) {
@@ -41,10 +42,10 @@ public class MC extends Thread
 
         try
         {
-            DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
+            DatagramPacket receivePacket = new DatagramPacket(receiveBufffer, receiveBufffer.length);
             mcSocket.receive(receivePacket);
 
-            String msg = new String(buf, 0, buf.length);
+            String msg = new String(receiveBufffer, 0, receiveBufffer.length);
             System.out.println("Message received: " + msg);
         } catch (IOException e) {
             e.printStackTrace();
