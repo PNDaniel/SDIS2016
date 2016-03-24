@@ -3,3 +3,6 @@
 
 # Ignore project configuration
 sdis_tp1.iml
+
+# Ignore project compiled program
+out/
