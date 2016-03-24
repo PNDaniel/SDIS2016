@@ -11,6 +11,11 @@ public class Initiator {
     private InetAddress ip;
     private int port;
 
+    //TODO : Arguments parsing
+    public static void main(String[] args) throws UnknownHostException {
+        new Initiator(args[0], Integer.parseInt(args[1]));
+    }
+
     public Initiator(String _ip, int _port) throws UnknownHostException {
         ip = InetAddress.getByName(_ip);
         port = _port;
@@ -32,11 +37,6 @@ public class Initiator {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    //TODO : Arguments parsing
-    public static void main(String[] args) throws UnknownHostException {
-        new Initiator(args[0], Integer.parseInt(args[1]));
     }
 
 }
