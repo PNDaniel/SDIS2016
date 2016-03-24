@@ -1,6 +1,5 @@
 package Agents;
 
-import ChannelListeners.Channel;
 import ChannelListeners.ChannelSpecific.ChannelMC;
 import ChannelListeners.ChannelSpecific.ChannelMDB;
 import ChannelListeners.ChannelSpecific.ChannelMDR;
@@ -30,16 +29,15 @@ public class Peer {
 
     }
 
-    // TODO : Arguments parsing
     public static void main(String[] args) throws UnknownHostException {
         if (
                 args[0].matches("\\d*") &&
-                args[1].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-                args[2].matches("\\d{4}") &&
-                args[3].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-                args[4].matches("\\d{4}") &&
-                args[5].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-                args[6].matches("\\d{4}")) {
+                        args[1].matches("(\\d{1,3}.){3}\\d{1,3}") &&
+                        args[2].matches("\\d{4}") &&
+                        args[3].matches("(\\d{1,3}.){3}\\d{1,3}") &&
+                        args[4].matches("\\d{4}") &&
+                        args[5].matches("(\\d{1,3}.){3}\\d{1,3}") &&
+                        args[6].matches("\\d{4}")) {
             new Peer(
                     Integer.parseInt(args[0]),
                     args[1],
