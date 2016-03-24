@@ -11,14 +11,9 @@ public class Initiator {
     private InetAddress ip;
     private int port;
 
-    //TODO : Arguments parsing
-    public static void main(String[] args) throws UnknownHostException {
-        new Initiator();
-    }
-
-    public Initiator() throws UnknownHostException {
-        ip = InetAddress.getByName("224.0.0.3");
-        port = 8001;
+    public Initiator(String _ip, int _port) throws UnknownHostException {
+        ip = InetAddress.getByName(_ip);
+        port = _port;
 
         // Open a new DatagramSocket, which will be used to send the data.
         try (MulticastSocket serverSocket = new MulticastSocket(port)) {
@@ -37,6 +32,11 @@ public class Initiator {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    //TODO : Arguments parsing
+    public static void main(String[] args) throws UnknownHostException {
+        new Initiator(args[0], Integer.parseInt(args[1]));
     }
 
 }
