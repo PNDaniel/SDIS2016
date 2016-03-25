@@ -1,5 +1,6 @@
 package ChannelListeners.ChannelSpecific;
 
+import Agents.Peer;
 import ChannelListeners.Channel;
 
 import java.io.IOException;
@@ -9,11 +10,11 @@ import java.net.MulticastSocket;
 
 public class ChannelMC extends Channel {
 
-    public ChannelMC(InetAddress _ip, int _port) {
-        super(_ip, _port);
+    public ChannelMC(Peer _peer, InetAddress _ip, int _port) {
+        super(_peer, _ip, _port);
     }
 
-    public void run () {
+    public void run() {
         System.out.println("Channel MC listening on port " + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
@@ -40,6 +41,11 @@ public class ChannelMC extends Channel {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    // TODO: Complete method
+    public void send() {
+        // send something through Channel MC
     }
 
 }

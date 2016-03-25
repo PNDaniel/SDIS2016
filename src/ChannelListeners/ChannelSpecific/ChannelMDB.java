@@ -1,5 +1,6 @@
 package ChannelListeners.ChannelSpecific;
 
+import Agents.Peer;
 import ChannelListeners.Channel;
 
 import java.io.IOException;
@@ -9,8 +10,8 @@ import java.net.MulticastSocket;
 
 public class ChannelMDB extends Channel {
 
-    public ChannelMDB(InetAddress _ip, int _port) {
-        super(_ip, _port);
+    public ChannelMDB(Peer _peer, InetAddress _ip, int _port) {
+        super(_peer, _ip, _port);
     }
 
     public void run() {

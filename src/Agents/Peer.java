@@ -45,16 +45,16 @@ public class Peer {
 
         System.out.println("Peer #" + id + " has started at: " + InetAddress.getLocalHost().getHostAddress() + ":8000");
 
-        channel_orders = new ChannelOrders(InetAddress.getLocalHost(), 8000);
+        channel_orders = new ChannelOrders(this, InetAddress.getLocalHost(), 8000);
         channel_orders.start();
 
-        channel_mc = new ChannelMC(InetAddress.getByName(ip_mc), port_mc);
+        channel_mc = new ChannelMC(this, InetAddress.getByName(ip_mc), port_mc);
         channel_mc.start();
 
-        channel_mdb = new ChannelMDB(InetAddress.getByName(ip_mdb), port_mdb);
+        channel_mdb = new ChannelMDB(this, InetAddress.getByName(ip_mdb), port_mdb);
         channel_mdb.start();
 
-        channel_mdr = new ChannelMDR(InetAddress.getByName(ip_mdr), port_mdr);
+        channel_mdr = new ChannelMDR(this, InetAddress.getByName(ip_mdr), port_mdr);
         channel_mdr.start();
 
     }
