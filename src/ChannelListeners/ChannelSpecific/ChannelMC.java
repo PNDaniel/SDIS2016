@@ -15,7 +15,7 @@ public class ChannelMC extends Channel {
     }
 
     public void run() {
-        System.out.println("Channel MC listening on port " + this.getPort());
+        System.out.println("Channel MC listening on " + this.getIp() + ":" + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.

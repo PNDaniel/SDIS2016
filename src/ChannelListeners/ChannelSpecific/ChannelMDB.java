@@ -15,7 +15,7 @@ public class ChannelMDB extends Channel {
     }
 
     public void run() {
-        System.out.println("Channel MDB listening on port " + this.getPort());
+        System.out.println("Channel MDB listening on " + this.getIp() + ":" + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.

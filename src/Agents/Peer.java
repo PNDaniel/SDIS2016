@@ -10,6 +10,9 @@ import java.net.UnknownHostException;
 
 public class Peer {
 
+    private final String multicast_ip = new String("224.0.1.0");
+    private final int multicast_port = 8000;
+
     private int id;
     private ChannelOrders channel_orders;
     private ChannelMC channel_mc;
@@ -18,21 +21,21 @@ public class Peer {
 
     public static void main(String[] args) throws UnknownHostException {
         if (
-            args[0].matches("\\d*") &&
-            args[1].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-            args[2].matches("\\d{4}") &&
-            args[3].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-            args[4].matches("\\d{4}") &&
-            args[5].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-            args[6].matches("\\d{4}")) {
+                args[0].matches("\\d*") &&
+                        args[1].matches("(\\d{1,3}.){3}\\d{1,3}") &&
+                        args[2].matches("\\d{4}") &&
+                        args[3].matches("(\\d{1,3}.){3}\\d{1,3}") &&
+                        args[4].matches("\\d{4}") &&
+                        args[5].matches("(\\d{1,3}.){3}\\d{1,3}") &&
+                        args[6].matches("\\d{4}")) {
             new Peer(
-                Integer.parseInt(args[0]),
-                args[1],
-                Integer.parseInt(args[2]),
-                args[3],
-                Integer.parseInt(args[4]),
-                args[5],
-                Integer.parseInt(args[6]));
+                    Integer.parseInt(args[0]),
+                    args[1],
+                    Integer.parseInt(args[2]),
+                    args[3],
+                    Integer.parseInt(args[4]),
+                    args[5],
+                    Integer.parseInt(args[6]));
         } else {
             System.out.println("Wrong usage: java Peer <id> <mc_ip> <mc_port> <mdb_ip> <mdb_port> <mdr_ip> <mdr_port>");
             System.exit(-1);
@@ -43,9 +46,7 @@ public class Peer {
 
         id = _id;
 
-        System.out.println("Peer #" + id + " has started at: " + InetAddress.getLocalHost().getHostAddress() + ":8000");
-
-        channel_orders = new ChannelOrders(this, InetAddress.getLocalHost(), 8000);
+        channel_orders = new ChannelOrders(this, InetAddress.getByName(multicast_ip), multicast_port);
         channel_orders.start();
 
         channel_mc = new ChannelMC(this, InetAddress.getByName(ip_mc), port_mc);
@@ -59,4 +60,19 @@ public class Peer {
 
     }
 
+    public void backup(String filename, int repDegree) {
+        System.out.println("BACKUP " + filename + " with degree = " + repDegree);
+    }
+
+    public void restore(String filename) {
+        System.out.println("RESTORE " + filename);
+    }
+
+    public void delete(String filename) {
+        System.out.println("DELETE " + filename);
+    }
+
+    public void reclaim(int size) {
+        System.out.println("RECLAIM " + size);
+    }
 }
