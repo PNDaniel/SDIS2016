@@ -3,6 +3,7 @@ package Agents;
 import ChannelListeners.ChannelSpecific.ChannelMC;
 import ChannelListeners.ChannelSpecific.ChannelMDB;
 import ChannelListeners.ChannelSpecific.ChannelMDR;
+import ChannelListeners.ChannelSpecific.ChannelOrders;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -10,6 +11,7 @@ import java.net.UnknownHostException;
 public class Peer {
 
     private int id;
+    private ChannelOrders channel_orders;
     private ChannelMC channel_mc;
     private ChannelMDB channel_mdb;
     private ChannelMDR channel_mdr;
@@ -40,6 +42,11 @@ public class Peer {
     public Peer(int _id, String ip_mc, int port_mc, String ip_mdb, int port_mdb, String ip_mdr, int port_mdr) throws UnknownHostException {
 
         id = _id;
+
+        System.out.println("Peer #" + id + " has started at: " + InetAddress.getLocalHost().getHostAddress() + ":8000");
+
+        channel_orders = new ChannelOrders(InetAddress.getLocalHost(), 8000);
+        channel_orders.start();
 
         channel_mc = new ChannelMC(InetAddress.getByName(ip_mc), port_mc);
         channel_mc.start();

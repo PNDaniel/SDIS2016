@@ -6,17 +6,25 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
-public class Initiator {
+public class TestApp {
 
     private InetAddress ip;
     private int port;
 
     //TODO : Arguments parsing
     public static void main(String[] args) throws UnknownHostException {
-        new Initiator(args[0], Integer.parseInt(args[1]));
+
+        System.out.println(InetAddress.getLocalHost().getHostAddress());
+
+        if (true) {
+            new TestApp(args[0], Integer.parseInt(args[1]));
+        } else {
+            System.out.println("Wrong usage! Try: java TestApp <ip> <port> <sub-protocol> <opnd1> <opnd2>");
+            System.exit(-1);
+        }
     }
 
-    public Initiator(String _ip, int _port) throws UnknownHostException {
+    public TestApp(String _ip, int _port) throws UnknownHostException {
         ip = InetAddress.getByName(_ip);
         port = _port;
 
