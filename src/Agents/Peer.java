@@ -13,7 +13,7 @@ public class Peer {
     private final String multicast_ip = new String("224.0.1.0");
     private final int multicast_port = 8000;
 
-    private int id;
+    private static int id;
     private ChannelOrders channel_orders;
     private ChannelMC channel_mc;
     private ChannelMDB channel_mdb;
@@ -74,5 +74,10 @@ public class Peer {
 
     public void reclaim(int size) {
         System.out.println("RECLAIM " + size);
+    }
+
+    public static int getServerID()
+    {
+        return id;
     }
 }
