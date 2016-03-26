@@ -37,7 +37,9 @@ public class ChannelOrders extends Channel {
 
                 String msg = new String(buf, 0, buf.length);
                 msg = msg.replace("\r\n\r\n", " ");
+
                 String[] msg_parts = msg.split(" ");
+
                 if (!msg_parts[0].equals("ORDER")) {
                     System.out.println("This peer only takes orders.");
                 } else if (msg_parts[1].equals("BACKUP")) {

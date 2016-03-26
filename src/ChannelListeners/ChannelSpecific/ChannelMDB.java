@@ -2,6 +2,7 @@ package ChannelListeners.ChannelSpecific;
 
 import Agents.Peer;
 import ChannelListeners.Channel;
+import Communication.Messages.PutchunkMsg;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -36,8 +37,43 @@ public class ChannelMDB extends Channel {
 
                 String msg = new String(buf, 0, buf.length);
                 System.out.println("MDB - Message received: " + msg);
+
+                msg = msg.replace("\r\n\r\n", " ");
+                String[] msg_parts = msg.split(" ");
+
+                if (!msg_parts[0].equals("PUTCHUNK")) {
+                    System.out.println("Received a message other than PUTCHUNK on MDB.");
+                } else if (!msg_parts[1].equals("1.0")) {
+                    System.out.println("Received a message with version higher than v1.0. No hablo v" + msg_parts[1]);
+                } else if (msg_parts[2].equals(this.getPeer().getServerID())) {
+                    System.out.println("Message from same computer. Ignoring...");
+                } else {
+                    System.out.println("FileID: " + msg_parts[3]);
+                    System.out.println("ChunkNo: " + msg_parts[4]);
+                    System.out.println("RepDegree: " + msg_parts[5]);
+                }
             }
 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void send(PutchunkMsg msg) {
+        // Open a new DatagramSocket, which will be used to send the data.
+        try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
+            serverSocket.joinGroup(this.getIp());
+
+            // Create a packet that will contain the data
+            // (in the form of bytes) and send it.
+            DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            serverSocket.send(msgPacket);
+            System.out.println("Sent over MDB: " + msg.toString());
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

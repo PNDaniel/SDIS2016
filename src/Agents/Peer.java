@@ -4,16 +4,23 @@ import ChannelListeners.ChannelSpecific.ChannelMC;
 import ChannelListeners.ChannelSpecific.ChannelMDB;
 import ChannelListeners.ChannelSpecific.ChannelMDR;
 import ChannelListeners.ChannelSpecific.ChannelOrders;
+import Communication.Messages.PutchunkMsg;
+import Utils.FileUtils;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class Peer {
 
-    private final String multicast_ip = new String("224.0.1.0");
     private final int multicast_port = 8000;
+    private final int body_limit = 64000;
 
     private static int id;
+    private String multicast_ip;
     private ChannelOrders channel_orders;
     private ChannelMC channel_mc;
     private ChannelMDB channel_mdb;
@@ -46,7 +53,9 @@ public class Peer {
 
         id = _id;
 
-        channel_orders = new ChannelOrders(this, InetAddress.getByName(multicast_ip), multicast_port);
+        this.multicast_ip = new String("224.0.224." + this.id);
+
+        channel_orders = new ChannelOrders(this, InetAddress.getByName(this.multicast_ip), multicast_port);
         channel_orders.start();
 
         channel_mc = new ChannelMC(this, InetAddress.getByName(ip_mc), port_mc);
@@ -60,8 +69,12 @@ public class Peer {
 
     }
 
-    public void backup(String filename, int repDegree) {
-        System.out.println("BACKUP " + filename + " with degree = " + repDegree);
+    // TODO: This function is made to test messages. Not completed.
+    public void backup(String filename, int repDeg) {
+        byte[] body = new byte[body_limit];
+        body = FileUtils.getBytesFromFile(filename, 0);
+        PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), 0, repDeg, body);
+        channel_mdb.send(msg);
     }
 
     public void restore(String filename) {
@@ -76,8 +89,7 @@ public class Peer {
         System.out.println("RECLAIM " + size);
     }
 
-    public static int getServerID()
-    {
+    public static int getServerID() {
         return id;
     }
 }
