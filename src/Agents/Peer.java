@@ -69,7 +69,13 @@ public class Peer {
 
     }
 
-    // TODO: This function is made to test messages. Not completed.
+    /*
+        TODO: This function is made to test messages. Not completed.
+        EXP:
+            Function must call FileUtils.getBytesFromFile(filename, 0 - Max of Chunks).
+            The returned bytes from FileUtils.getBytesFromFile(...) must be put into a PutchunkMsg like done below.
+            To send a message through MDB, just call channel_mdb.send(msg) where msg is a PutchunkMsg.
+    */
     public void backup(String filename, int repDeg) {
         byte[] body = new byte[body_limit];
         body = FileUtils.getBytesFromFile(filename, 0);

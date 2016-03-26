@@ -27,6 +27,11 @@ public class FileUtils {
     }
 
     // TODO: Complete function
+    /*
+        This function must open the file(filename) and return
+        the chunkN' chunk with maximum size of BODY_LIMIT
+        @ivolimasilva: Couldn't make this to work :'(
+     */
     public static byte[] getBytesFromFile(String filename, int chunkN) {
         return new String("Say no to spaghetti code!").getBytes();
     }

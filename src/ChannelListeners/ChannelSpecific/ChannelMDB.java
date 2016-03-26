@@ -27,7 +27,7 @@ public class ChannelMDB extends Channel {
         // to join it as well.
         try (MulticastSocket clientSocket = new MulticastSocket(this.getPort())) {
 
-            //Joint the Multicast group.
+            //Join the Multicast group.
             clientSocket.joinGroup(this.getIp());
 
             while (true) {
@@ -53,15 +53,17 @@ public class ChannelMDB extends Channel {
                     System.out.println("RepDegree: " + msg_parts[5]);
                 }
             }
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public void send(PutchunkMsg msg) {
+
         // Open a new DatagramSocket, which will be used to send the data.
         try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
+
+            //Join the Multicast group.
             serverSocket.joinGroup(this.getIp());
 
             // Create a packet that will contain the data
@@ -69,6 +71,7 @@ public class ChannelMDB extends Channel {
             DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
             serverSocket.send(msgPacket);
             System.out.println("Sent over MDB: " + msg.toString());
+
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {
