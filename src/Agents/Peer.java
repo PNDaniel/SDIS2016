@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Peer {
 
@@ -76,11 +78,24 @@ public class Peer {
             The returned bytes from FileUtils.getBytesFromFile(...) must be put into a PutchunkMsg like done below.
             To send a message through MDB, just call channel_mdb.send(msg) where msg is a PutchunkMsg.
     */
-    public void backup(String filename, int repDeg) {
+    public void backup(String filename, int repDeg) throws IOException
+    {
+        ArrayList<byte[]> chunkList = FileUtils.getBytesFromFile(filename);
+        byte[] body;
+        for(int i = 0; i < chunkList.size(); i++)
+        {
+            body = chunkList.get(i);
+            PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), 0, repDeg, body);
+            channel_mdb.send(msg);
+        }
+
+        /*
         byte[] body = new byte[body_limit];
         body = FileUtils.getBytesFromFile(filename, 0);
         PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), 0, repDeg, body);
         channel_mdb.send(msg);
+         */
+
     }
 
     public void restore(String filename) {

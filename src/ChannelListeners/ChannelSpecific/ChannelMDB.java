@@ -51,6 +51,7 @@ public class ChannelMDB extends Channel {
                     System.out.println("FileID: " + msg_parts[3]);
                     System.out.println("ChunkNo: " + msg_parts[4]);
                     System.out.println("RepDegree: " + msg_parts[5]);
+                    //System.out.println("Body: " + msg_parts[6]);
                 }
             }
         } catch (IOException ex) {

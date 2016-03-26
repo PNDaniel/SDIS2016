@@ -1,9 +1,9 @@
 package Utils;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FileUtils {
 
@@ -32,8 +32,22 @@ public class FileUtils {
         the chunkN' chunk with maximum size of BODY_LIMIT
         @ivolimasilva: Couldn't make this to work :'(
      */
-    public static byte[] getBytesFromFile(String filename, int chunkN) {
-        return new String("Say no to spaghetti code!").getBytes();
+    public static ArrayList<byte[]> getBytesFromFile(String filename) throws IOException
+    {
+        ArrayList<byte[]> fileChunks  = new ArrayList<>();
+        FileInputStream file = new FileInputStream(filename);
+        System.out.println("Filename: "+ filename);
+        byte[] body = new byte[body_limit];
+        int halt;
+        do
+        {
+            halt = file.read(body);
+            System.out.println("BodyCreater:" + body.toString());
+            fileChunks.add(body);
+        }while(halt != -1);
+        file.close();
+
+        return fileChunks;
     }
 
 }
