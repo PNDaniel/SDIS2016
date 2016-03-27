@@ -40,7 +40,6 @@ public class FileUtils {
                 fileChunks.add(Arrays.copyOf(body, halt));
                 //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
             }
-            //fileChunks.add(body);
         }while(halt != -1);
         file.close();
 

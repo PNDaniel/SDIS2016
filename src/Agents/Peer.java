@@ -70,12 +70,11 @@ public class Peer {
     {
         ArrayList<byte[]> chunkList = FileUtils.getBytesFromFile(filename);
         byte[] body;
+        System.out.println("File ID in Backup function: " + filename);
         for(int i = 0; i < chunkList.size(); i++)
         {
             body = chunkList.get(i);
-            //System.out.println("Backup Body : " + body.toString());
             PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), i, repDeg, body);
-            //System.out.println("Backup Function ServerID: " + this.id);;
             channel_mdb.send(msg);
         }
     }
