@@ -36,18 +36,20 @@ public class FileUtils {
     {
         ArrayList<byte[]> fileChunks  = new ArrayList<>();
         FileInputStream file = new FileInputStream(filename);
-        System.out.println("Filename: "+ filename);
         byte[] body = new byte[body_limit];
         int halt;
         do
         {
             halt = file.read(body);
-            System.out.println("BodyCreater:" + body.toString());
-            fileChunks.add(body);
+            if(halt != -1)
+            {
+                fileChunks.add(Arrays.copyOf(body, halt));
+                //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
+            }
+            //fileChunks.add(body);
         }while(halt != -1);
         file.close();
 
         return fileChunks;
     }
-
 }
