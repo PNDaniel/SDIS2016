@@ -3,6 +3,7 @@ package ChannelListeners.ChannelSpecific;
 import Agents.Peer;
 import ChannelListeners.Channel;
 import Communication.Messages.PutchunkMsg;
+import Utils.FileUtils;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -55,6 +56,9 @@ public class ChannelMDB extends Channel {
                     System.out.println("ChunkNo: " + msg_parts[4]);
                     System.out.println("RepDegree: " + msg_parts[5]);
                     System.out.println("Body: " + msg_parts[6]);
+                    byte[] body = msg_parts[6].getBytes();
+                    System.out.println("Body 2: " + body);
+                    FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
                 }
             }
         } catch (IOException ex) {

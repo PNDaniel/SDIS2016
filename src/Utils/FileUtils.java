@@ -34,7 +34,7 @@ public class FileUtils {
         int halt;
         if ((file.getChannel().size() % body_limit) == 0)
         {
-            System.out.println("64KB");
+            //System.out.println("64KB");
             do
             {
                 halt = file.read(body);
@@ -49,7 +49,7 @@ public class FileUtils {
         }
         else
         {
-            System.out.println("65KB");
+            //System.out.println("65KB");
             do
             {
                 halt = file.read(body);
@@ -63,5 +63,27 @@ public class FileUtils {
         file.close();
 
         return fileChunks;
+    }
+
+    public static void createChunk(String fileID, int chunkNo, byte[] data)
+    {
+        String filename = fileID + chunkNo;
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(filename);
+            file.write(data);
+            file.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*
+        byte data[] = ...
+        FileOutputStream out = new FileOutputStream("the-file-name");
+        out.write(data);
+        out.close();
+         */
     }
 }
