@@ -32,15 +32,34 @@ public class FileUtils {
         FileInputStream file = new FileInputStream(filename);
         byte[] body = new byte[body_limit];
         int halt;
-        do
+        if ((file.getChannel().size() % body_limit) == 0)
         {
-            halt = file.read(body);
-            if(halt != -1)
+            System.out.println("64KB");
+            do
             {
-                fileChunks.add(Arrays.copyOf(body, halt));
-                //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
-            }
-        }while(halt != -1);
+                halt = file.read(body);
+                if(halt != -1)
+                {
+                    fileChunks.add(Arrays.copyOf(body, halt));
+                    //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
+                }
+            }while(halt != -1);
+            byte[] last = new byte[0];
+            fileChunks.add(Arrays.copyOf(last,0));
+        }
+        else
+        {
+            System.out.println("65KB");
+            do
+            {
+                halt = file.read(body);
+                if(halt != -1)
+                {
+                    fileChunks.add(Arrays.copyOf(body, halt));
+                    //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
+                }
+            }while(halt != -1);
+        }
         file.close();
 
         return fileChunks;
