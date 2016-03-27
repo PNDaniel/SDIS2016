@@ -40,18 +40,21 @@ public class ChannelMDB extends Channel {
 
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
-
+                // Ignore message here
                 if (!msg_parts[0].equals("PUTCHUNK")) {
                     System.out.println("Received a message other than PUTCHUNK on MDB.");
                 } else if (!msg_parts[1].equals("1.0")) {
                     System.out.println("Received a message with version higher than v1.0. No hablo v" + msg_parts[1]);
-                } else if (msg_parts[2].equals(this.getPeer().getServerID())) {
+                } else if(Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID())
+                {
                     System.out.println("Message from same computer. Ignoring...");
                 } else {
+                    System.out.println("This serverID: " + this.getPeer().getServerID());
+                    System.out.println("ServerID: " +  msg_parts[2]);
                     System.out.println("FileID: " + msg_parts[3]);
                     System.out.println("ChunkNo: " + msg_parts[4]);
                     System.out.println("RepDegree: " + msg_parts[5]);
-                    //System.out.println("Body: " + msg_parts[6]);
+                    System.out.println("Body: " + msg_parts[6]);
                 }
             }
         } catch (IOException ex) {
@@ -71,8 +74,8 @@ public class ChannelMDB extends Channel {
             // (in the form of bytes) and send it.
             DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
             serverSocket.send(msgPacket);
-            System.out.println("Sent over MDB: " + msg.toString());
 
+            System.out.println("Sent over MDB: " + msg.toString());
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {
@@ -82,5 +85,4 @@ public class ChannelMDB extends Channel {
             ex.printStackTrace();
         }
     }
-
 }

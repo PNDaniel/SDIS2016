@@ -26,12 +26,6 @@ public class FileUtils {
         }
     }
 
-    // TODO: Complete function
-    /*
-        This function must open the file(filename) and return
-        the chunkN' chunk with maximum size of BODY_LIMIT
-        @ivolimasilva: Couldn't make this to work :'(
-     */
     public static ArrayList<byte[]> getBytesFromFile(String filename) throws IOException
     {
         ArrayList<byte[]> fileChunks  = new ArrayList<>();
