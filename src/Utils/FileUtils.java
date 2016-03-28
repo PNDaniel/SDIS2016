@@ -26,47 +26,38 @@ public class FileUtils {
         }
     }
 
-    public static ArrayList<byte[]> getBytesFromFile(String filename) throws IOException
-    {
-        ArrayList<byte[]> fileChunks  = new ArrayList<>();
+    public static ArrayList<byte[]> getBytesFromFile(String filename) throws IOException {
+        ArrayList<byte[]> fileChunks = new ArrayList<>();
         FileInputStream file = new FileInputStream(filename);
         byte[] body = new byte[body_limit];
         int halt;
-        if ((file.getChannel().size() % body_limit) == 0)
-        {
+        if ((file.getChannel().size() % body_limit) == 0) {
             //System.out.println("64KB");
-            do
-            {
+            do {
                 halt = file.read(body);
-                if(halt != -1)
-                {
+                if (halt != -1) {
                     fileChunks.add(Arrays.copyOf(body, halt));
                     //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
                 }
-            }while(halt != -1);
+            } while (halt != -1);
             byte[] last = new byte[0];
-            fileChunks.add(Arrays.copyOf(last,0));
-        }
-        else
-        {
+            fileChunks.add(Arrays.copyOf(last, 0));
+        } else {
             //System.out.println("65KB");
-            do
-            {
+            do {
                 halt = file.read(body);
-                if(halt != -1)
-                {
+                if (halt != -1) {
                     fileChunks.add(Arrays.copyOf(body, halt));
                     //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
                 }
-            }while(halt != -1);
+            } while (halt != -1);
         }
         file.close();
 
         return fileChunks;
     }
 
-    public static void createChunk(String fileID, int chunkNo, byte[] data)
-    {
+    public static void createChunk(String fileID, int chunkNo, byte[] data) {
 
         String filename = fileID + "_" + chunkNo;
         FileOutputStream file = null;

@@ -1,8 +1,13 @@
 package ChannelListeners;
 
 import Agents.Peer;
+import Communication.Message;
+import Communication.Messages.PutchunkMsg;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 
 public class Channel extends Thread {
 
@@ -14,6 +19,30 @@ public class Channel extends Thread {
         this.peer = _peer;
         this.ip = _ip;
         this.port = _port;
+    }
+
+    public void send(Message msg) {
+
+        // Open a new DatagramSocket, which will be used to send the data.
+        try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
+
+            //Join the Multicast group.
+            serverSocket.joinGroup(this.getIp());
+
+            // Create a packet that will contain the data
+            // (in the form of bytes) and send it.
+            DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            serverSocket.send(msgPacket);
+
+            System.out.println("Sent over MDB: " + msg.toString());
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Peer getPeer() {

@@ -1,5 +1,6 @@
 package Communication.Messages;
 
+import Communication.InvalidMessage;
 import Communication.Message;
 
 public class PutchunkMsg extends Message {

@@ -68,13 +68,11 @@ public class Peer {
         channel_mdr.start();
     }
 
-    public void backup(String filename, int repDeg) throws IOException
-    {
+    public void backup(String filename, int repDeg) throws IOException {
         ArrayList<byte[]> chunkList = FileUtils.getBytesFromFile(filename);
         byte[] body;
         //System.out.println("File ID in Backup function: " + filename);
-        for(int i = 0; i < chunkList.size(); i++)
-        {
+        for (int i = 0; i < chunkList.size(); i++) {
             body = chunkList.get(i);
             PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), i, repDeg, body);
             channel_mdb.send(msg);
@@ -98,13 +96,12 @@ public class Peer {
     public static int getServerID() {
         return id;
     }
-    public static ChannelMC getChannelMC()
-    {
+
+    public static ChannelMC getChannelMC() {
         return channel_mc;
     }
 
-    public void incrementList(String chunkName)
-    {
+    public void incrementList(String chunkName) {
         chunksStoredList.add(chunkName);
     }
 }
