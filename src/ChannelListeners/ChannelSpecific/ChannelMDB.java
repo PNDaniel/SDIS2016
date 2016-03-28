@@ -60,7 +60,7 @@ public class ChannelMDB extends Channel {
                     System.out.println("Body: " + msg_parts[6]);
                     byte[] body = msg_parts[6].getBytes();
                     //System.out.println("Body 2: " + new String(body));
-                    //FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
+                    FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
 
                     StoredMsg msgStored = new StoredMsg(this.getPeer().getServerID(), msg_parts[3], Integer.parseInt(msg_parts[4]));
 
