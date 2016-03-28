@@ -20,9 +20,9 @@ public class Peer {
     private static int id;
     private String multicast_ip;
     private ChannelOrders channel_orders;
-    private ChannelMC channel_mc;
-    private ChannelMDB channel_mdb;
-    private ChannelMDR channel_mdr;
+    private static ChannelMC channel_mc;
+    private static ChannelMDB channel_mdb;
+    private static ChannelMDR channel_mdr;
 
     public static void main(String[] args) throws UnknownHostException {
         if (
@@ -70,7 +70,7 @@ public class Peer {
     {
         ArrayList<byte[]> chunkList = FileUtils.getBytesFromFile(filename);
         byte[] body;
-        System.out.println("File ID in Backup function: " + filename);
+        //System.out.println("File ID in Backup function: " + filename);
         for(int i = 0; i < chunkList.size(); i++)
         {
             body = chunkList.get(i);
@@ -93,5 +93,14 @@ public class Peer {
 
     public static int getServerID() {
         return id;
+    }
+    public static ChannelMC getChannelMC()
+    {
+        return channel_mc;
+    }
+
+    public ChannelMC getChannel_mc()
+    {
+        return channel_mc;
     }
 }

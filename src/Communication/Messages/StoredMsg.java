@@ -19,6 +19,12 @@ public class StoredMsg extends Message {
         String result = new String();
 
         // TODO: Build string ready to deliver
+        result = this.getMsgType().toString() + " "
+                + this.getVersion() + " "
+                + this.getSenderID() + " "
+                + this.getFileID() + " "
+                + this.chunkN + " "
+                + "\r\n\r\n";
 
         return result;
     }

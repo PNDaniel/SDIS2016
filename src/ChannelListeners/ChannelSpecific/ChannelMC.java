@@ -2,6 +2,7 @@ package ChannelListeners.ChannelSpecific;
 
 import Agents.Peer;
 import ChannelListeners.Channel;
+import Communication.Message;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -36,6 +37,13 @@ public class ChannelMC extends Channel {
 
                 String msg = new String(buf, 0, buf.length);
                 System.out.println("MC - Message received: " + msg);
+
+                msg = msg.replace("\r\n\r\n", " ");
+                String[] msg_parts = msg.split(" ");
+                if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
+                    System.out.println("Message from same computer. Ignoring...");
+                }
+                else System.out.println("MC - Message received: " + msg);
             }
 
         } catch (IOException ex) {
@@ -43,9 +51,27 @@ public class ChannelMC extends Channel {
         }
     }
 
-    // TODO: Complete method
-    public void send() {
-        // send something through Channel MC
-    }
+    public void send(Message msg)
+    {
+        // Open a new DatagramSocket, which will be used to send the data.
+        try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
 
+            //Join the Multicast group.
+            serverSocket.joinGroup(this.getIp());
+
+            // Create a packet that will contain the data
+            // (in the form of bytes) and send it.
+            DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            serverSocket.send(msgPacket);
+
+            System.out.println("Sent over MC: " + msg.toString());
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
