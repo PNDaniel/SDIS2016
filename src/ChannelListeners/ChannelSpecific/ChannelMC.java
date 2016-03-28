@@ -36,7 +36,7 @@ public class ChannelMC extends Channel {
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
-                System.out.println("MC - Message received: " + msg);
+                //System.out.println("MC - Message received: " + msg);
 
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");

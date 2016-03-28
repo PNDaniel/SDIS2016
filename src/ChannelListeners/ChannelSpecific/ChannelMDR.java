@@ -2,6 +2,7 @@ package ChannelListeners.ChannelSpecific;
 
 import Agents.Peer;
 import ChannelListeners.Channel;
+import Communication.Messages.GetchunkMsg;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -43,4 +44,27 @@ public class ChannelMDR extends Channel {
         }
     }
 
+    public void send(GetchunkMsg msg) {
+
+        // Open a new DatagramSocket, which will be used to send the data.
+        try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
+
+            //Join the Multicast group.
+            serverSocket.joinGroup(this.getIp());
+
+            // Create a packet that will contain the data
+            // (in the form of bytes) and send it.
+            DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            serverSocket.send(msgPacket);
+
+            System.out.println("Sent over MDR: " + msg.toString());
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

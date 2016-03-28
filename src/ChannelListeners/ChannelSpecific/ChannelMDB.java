@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ChannelMDB extends Channel {
 
@@ -40,7 +41,7 @@ public class ChannelMDB extends Channel {
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
-                System.out.println("MDB - Message received: " + msg);
+                //System.out.println("MDB - Message received: " + msg);
 
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
@@ -52,7 +53,8 @@ public class ChannelMDB extends Channel {
                 } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
                     System.out.println("Message from same computer. Ignoring...");
                 } else {
-                    System.out.println("This serverID: " + this.getPeer().getServerID());
+                    System.out.println("MDB - Message received: " + msg);
+
                     System.out.println("ServerID: " + msg_parts[2]);
                     System.out.println("FileID: " + msg_parts[3]);
                     System.out.println("ChunkNo: " + msg_parts[4]);
@@ -63,13 +65,22 @@ public class ChannelMDB extends Channel {
                     FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
 
                     StoredMsg msgStored = new StoredMsg(this.getPeer().getServerID(), msg_parts[3], Integer.parseInt(msg_parts[4]));
-
-                    if(!(Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()))
+                    /*
+                    https://examples.javacodegeeks.com/core-java/util/concurrent/threadlocalrandom/java-util-concurrent-threadlocalrandom-example/
+                     Random delay between 0 and 400ms
+                    */
+                    try {
+                        Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Peer.getChannelMC().send(msgStored);
+                   /* if(!(Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()))
                     {
                         System.out.println("From msg: " + msg_parts[2]);
                         System.out.println("This Server ID: " + this.getPeer().getServerID());
-                        Peer.getChannelMC().send(msgStored);
-                    }
+
+                    }*/
                 }
             }
         } catch (IOException ex) {
