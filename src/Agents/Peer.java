@@ -4,6 +4,7 @@ import ChannelListeners.ChannelSpecific.ChannelMC;
 import ChannelListeners.ChannelSpecific.ChannelMDB;
 import ChannelListeners.ChannelSpecific.ChannelMDR;
 import ChannelListeners.ChannelSpecific.ChannelOrders;
+import Communication.Messages.GetchunkMsg;
 import Communication.Messages.PutchunkMsg;
 import Utils.FileUtils;
 
@@ -16,6 +17,7 @@ public class Peer {
 
     private final int multicast_port = 8000;
     private final int body_limit = 64000;
+    ArrayList<String> chunksStoredList;
 
     private static int id;
     private String multicast_ip;
@@ -80,7 +82,9 @@ public class Peer {
     }
 
     public void restore(String filename) {
-        System.out.println("RESTORE " + filename);
+        //System.out.println("RESTORE " + filename);
+        GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), 0);
+        channel_mc.send(msg);
     }
 
     public void delete(String filename) {
@@ -99,8 +103,8 @@ public class Peer {
         return channel_mc;
     }
 
-    public ChannelMC getChannel_mc()
+    public void incrementList(String chunkName)
     {
-        return channel_mc;
+        chunksStoredList.add(chunkName);
     }
 }

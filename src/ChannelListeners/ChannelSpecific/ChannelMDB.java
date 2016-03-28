@@ -43,6 +43,7 @@ public class ChannelMDB extends Channel {
                 String msg = new String(buf, 0, buf.length);
                 //System.out.println("MDB - Message received: " + msg);
 
+                //retirar null (delete)
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
                 // Ignore message here

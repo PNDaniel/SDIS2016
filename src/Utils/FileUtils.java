@@ -67,10 +67,12 @@ public class FileUtils {
 
     public static void createChunk(String fileID, int chunkNo, byte[] data)
     {
-        String filename = fileID + chunkNo;
+
+        String filename = fileID + "_" + chunkNo;
         FileOutputStream file = null;
         try {
             file = new FileOutputStream(filename);
+
             file.write(data);
             file.close();
         } catch (FileNotFoundException e) {
