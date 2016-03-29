@@ -13,7 +13,12 @@ public class RestoreOrder extends Order {
 
     @Override
     public String toString() {
-        return null;
+        String result = new String();
+
+        result = this.getSubprotocol().toString() + " "
+                + this.filename;
+
+        return result;
     }
 
 }

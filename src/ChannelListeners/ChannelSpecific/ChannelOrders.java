@@ -40,15 +40,15 @@ public class ChannelOrders extends Channel {
 
                 String[] msg_parts = msg.split(" ");
 
-                if (!msg_parts[0].equals("ORDER")) {
-                    System.out.println("This peer only takes orders.");
-                } else if (msg_parts[1].equals("BACKUP")) {
+                if (!msg_parts[0].matches("BACKUP|RESTORE|DELETE|RECLAIM")) {
+                    System.out.println("This peer only takes orders (Backup, Restore, Delete or Reclaim).");
+                } else if (msg_parts[0].equals("BACKUP")) {
                     this.getPeer().backup(msg_parts[2], Integer.parseInt(msg_parts[3]));
-                } else if (msg_parts[1].equals("RESTORE")) {
+                } else if (msg_parts[0].equals("RESTORE")) {
                     this.getPeer().restore(msg_parts[2]);
-                } else if (msg_parts[1].equals("DELETE")) {
+                } else if (msg_parts[0].equals("DELETE")) {
                     this.getPeer().delete(msg_parts[2]);
-                } else if (msg_parts[1].equals("RECLAIM")) {
+                } else if (msg_parts[0].equals("RECLAIM")) {
                     this.getPeer().reclaim(Integer.parseInt(msg_parts[2]));
                 } else {
                     System.out.println("This peer didn't recognized the order");
