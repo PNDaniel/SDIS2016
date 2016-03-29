@@ -21,7 +21,7 @@ public class ChannelMDB extends Channel {
     }
 
     public void run() {
-        System.out.println("Channel MDB listening on " + this.getIp() + ":" + this.getPort());
+        this.log("I'm listening on " + this.getIp() + ":" + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.
@@ -48,19 +48,24 @@ public class ChannelMDB extends Channel {
                 String[] msg_parts = msg.split(" ");
                 // Ignore message here
                 if (!msg_parts[0].equals("PUTCHUNK")) {
-                    System.out.println("Received a message other than PUTCHUNK on MDB.");
+                    this.log("Invalid message in the MDB: " + msg_parts[0]);
                 } else if (!msg_parts[1].equals("1.0")) {
-                    System.out.println("Received a message with version higher than v1.0. No hablo v" + msg_parts[1]);
+                    this.log("What? Version " + msg_parts[1] + "?! No hablo español...");
                 } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
-                    System.out.println("Message from same computer. Ignoring...");
+                    this.log(msg + "\nWhat? I sent this! Ignoring..");
                 } else {
-                    System.out.println("MDB - Message received: " + msg);
 
-                    System.out.println("ServerID: " + msg_parts[2]);
-                    System.out.println("FileID: " + msg_parts[3]);
-                    System.out.println("ChunkNo: " + msg_parts[4]);
-                    System.out.println("RepDegree: " + msg_parts[5]);
-                    System.out.println("Body: " + msg_parts[6]);
+                    this.log("Received transmition:\nServerID:    " +
+                            msg_parts[2] +
+                            "\nFileID:      " +
+                            msg_parts[3] +
+                            "\nChunkNo:     " +
+                            msg_parts[4] +
+                            "\nRepDegree:   " +
+                            msg_parts[5] +
+                            "\nBody:        " +
+                            msg_parts[6]);
+
                     byte[] body = msg_parts[6].getBytes();
                     //System.out.println("Body 2: " + new String(body));
                     FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
@@ -80,7 +85,6 @@ public class ChannelMDB extends Channel {
                     {
                         System.out.println("From msg: " + msg_parts[2]);
                         System.out.println("This Server ID: " + this.getPeer().getServerID());
-
                     }*/
                 }
             }

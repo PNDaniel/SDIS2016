@@ -16,7 +16,7 @@ public class ChannelOrders extends Channel {
     }
 
     public void run() {
-        System.out.println("Peer will be listening to orders on " + this.getIp() + ":" + this.getPort());
+        this.log("I'm listening on " + this.getIp() + ":" + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.
@@ -38,12 +38,10 @@ public class ChannelOrders extends Channel {
                 String msg = new String(buf, 0, buf.length);
                 msg = msg.replace("\r\n\r\n", " ");
 
-                System.out.println("MSG RECEIVED:\n" + msg);
-
                 String[] msg_parts = msg.split(" ");
 
                 if (!msg_parts[0].matches("BACKUP|RESTORE|DELETE|RECLAIM")) {
-                    System.out.println("This peer only takes orders (Backup, Restore, Delete or Reclaim).");
+                    this.log("Received invalid order: " + msg_parts[0]);
                 } else if (msg_parts[0].equals("BACKUP")) {
                     this.getPeer().backup(msg_parts[1], Integer.parseInt(msg_parts[2]));
                 } else if (msg_parts[0].equals("RESTORE")) {
@@ -52,8 +50,6 @@ public class ChannelOrders extends Channel {
                     this.getPeer().delete(msg_parts[1]);
                 } else if (msg_parts[0].equals("RECLAIM")) {
                     this.getPeer().reclaim(Integer.parseInt(msg_parts[1]));
-                } else {
-                    System.out.println("This peer didn't recognized the order");
                 }
             }
 

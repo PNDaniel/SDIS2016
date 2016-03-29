@@ -16,7 +16,7 @@ public class ChannelMC extends Channel {
     }
 
     public void run() {
-        System.out.println("Channel MC listening on " + this.getIp() + ":" + this.getPort());
+        this.log("I'm listening on " + this.getIp() + ":" + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.
@@ -41,9 +41,9 @@ public class ChannelMC extends Channel {
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
                 if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
-                    System.out.println("Message from same computer. Ignoring...");
+                    this.log(msg + "\nWhat? I sent this! Ignoring..");
                 } else {
-                    System.out.println("MC - Message received: " + msg);
+                    this.log("Received transmition:\n" + msg);
                 }
             }
 

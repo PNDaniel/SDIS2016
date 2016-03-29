@@ -16,7 +16,7 @@ public class ChannelMDR extends Channel {
     }
 
     public void run() {
-        System.out.println("Channel MDR listening on " + this.getIp() + ":" + this.getPort());
+        this.log("I'm listening on " + this.getIp() + ":" + this.getPort());
 
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.
@@ -36,7 +36,7 @@ public class ChannelMDR extends Channel {
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
-                System.out.println("MDR - Message received: " + msg);
+                this.log("Received transmition:\n" + msg);
             }
 
         } catch (IOException ex) {
