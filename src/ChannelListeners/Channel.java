@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Channel extends Thread {
 
@@ -36,7 +37,6 @@ public abstract class Channel extends Thread {
     }
 
     public void send(Message msg) {
-
         // Open a new DatagramSocket, which will be used to send the data.
         try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
 

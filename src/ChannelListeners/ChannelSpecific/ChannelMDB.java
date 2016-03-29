@@ -41,12 +41,9 @@ public class ChannelMDB extends Channel {
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
-                //System.out.println("MDB - Message received: " + msg);
-
-                //retirar null (delete)
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
-                // Ignore message here
+
                 if (!msg_parts[0].equals("PUTCHUNK")) {
                     this.log("Invalid message in the MDB: " + msg_parts[0]);
                 } else if (!msg_parts[1].equals("1.0")) {
@@ -54,7 +51,6 @@ public class ChannelMDB extends Channel {
                 } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
                     this.log(msg + "\nWhat? I sent this! Ignoring..");
                 } else {
-
                     this.log("Received transmition:\nServerID:    " +
                             msg_parts[2] +
                             "\nFileID:      " +
@@ -67,25 +63,9 @@ public class ChannelMDB extends Channel {
                             msg_parts[6]);
 
                     byte[] body = msg_parts[6].getBytes();
-                    //System.out.println("Body 2: " + new String(body));
                     FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
 
-                    StoredMsg msgStored = new StoredMsg(this.getPeer().getServerID(), msg_parts[3], Integer.parseInt(msg_parts[4]));
-                    /*
-                    https://examples.javacodegeeks.com/core-java/util/concurrent/threadlocalrandom/java-util-concurrent-threadlocalrandom-example/
-                     Random delay between 0 and 400ms
-                    */
-                    try {
-                        Thread.sleep(ThreadLocalRandom.current().nextInt(401));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Peer.getChannelMC().send(msgStored);
-                   /* if(!(Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()))
-                    {
-                        System.out.println("From msg: " + msg_parts[2]);
-                        System.out.println("This Server ID: " + this.getPeer().getServerID());
-                    }*/
+                    this.getPeer().stored(msg_parts[3], Integer.parseInt(msg_parts[4]));
                 }
             }
         } catch (IOException ex) {

@@ -6,6 +6,7 @@ import ChannelListeners.ChannelSpecific.ChannelMDR;
 import ChannelListeners.ChannelSpecific.ChannelOrders;
 import Communication.Messages.GetchunkMsg;
 import Communication.Messages.PutchunkMsg;
+import Communication.Messages.StoredMsg;
 import Utils.FileUtils;
 
 import java.io.IOException;
@@ -71,12 +72,18 @@ public class Peer {
     public void backup(String filename, int repDeg) throws IOException {
         ArrayList<byte[]> chunkList = FileUtils.getBytesFromFile(filename);
         byte[] body;
-        //System.out.println("File ID in Backup function: " + filename);
+
         for (int i = 0; i < chunkList.size(); i++) {
             body = chunkList.get(i);
+
             PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), i, repDeg, body);
             channel_mdb.send(msg);
         }
+    }
+
+    public void stored(String _fileid, int chunkN) {
+        StoredMsg msg = new StoredMsg(this.id, _fileid, chunkN);
+        channel_mc.send(msg);
     }
 
     public void restore(String filename) {
@@ -97,11 +104,8 @@ public class Peer {
         return id;
     }
 
-    public static ChannelMC getChannelMC() {
-        return channel_mc;
-    }
-
     public void incrementList(String chunkName) {
         chunksStoredList.add(chunkName);
     }
+
 }
