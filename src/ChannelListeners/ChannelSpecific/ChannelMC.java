@@ -40,7 +40,9 @@ public class ChannelMC extends Channel {
 
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
-                if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
+                if (msg_parts[0].equals("STORED")) {
+                    this.getPeer().insert(Integer.parseInt(msg_parts[2]), msg_parts[3], Integer.parseInt(msg_parts[4]));
+                } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
                     this.log(msg + "\nWhat? I sent this! Ignoring..");
                 } else {
                     this.log("Received transmition:\n" + msg);

@@ -8,6 +8,7 @@ import Communication.Messages.GetchunkMsg;
 import Communication.Messages.PutchunkMsg;
 import Communication.Messages.StoredMsg;
 import Utils.FileUtils;
+import Utils.Registry;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -18,7 +19,6 @@ public class Peer {
 
     private final int multicast_port = 8000;
     private final int body_limit = 64000;
-    ArrayList<String> chunksStoredList;
 
     private static int id;
     private String multicast_ip;
@@ -26,6 +26,8 @@ public class Peer {
     private static ChannelMC channel_mc;
     private static ChannelMDB channel_mdb;
     private static ChannelMDR channel_mdr;
+
+    private ArrayList<Registry> database;
 
     public static void main(String[] args) throws UnknownHostException {
         if (
@@ -87,7 +89,6 @@ public class Peer {
     }
 
     public void restore(String filename) {
-        //System.out.println("RESTORE " + filename);
         GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), 0);
         channel_mc.send(msg);
     }
@@ -104,8 +105,14 @@ public class Peer {
         return id;
     }
 
-    public void incrementList(String chunkName) {
-        chunksStoredList.add(chunkName);
+    public void insert(int _serverID, String _fileID, int _chunkN) {
+        database.add(new Registry(_serverID, _fileID, _chunkN));
+    }
+
+    public void select() {
+        for (int i = 0; i < database.size(); i++) {
+            System.out.println(database.get(i));
+        }
     }
 
 }
