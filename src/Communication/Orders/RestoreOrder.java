@@ -16,7 +16,8 @@ public class RestoreOrder extends Order {
         String result = new String();
 
         result = this.getSubprotocol().toString() + " "
-                + this.filename;
+                + this.filename
+                + "\r\n\r\n";
 
         return result;
     }

@@ -16,7 +16,8 @@ public class ReclaimOrder extends Order {
         String result = new String();
 
         result = this.getSubprotocol().toString() + " "
-                + this.size;
+                + this.size
+                + "\r\n\r\n";
 
         return result;
     }

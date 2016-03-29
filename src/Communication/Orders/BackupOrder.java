@@ -19,7 +19,8 @@ public class BackupOrder extends Order {
 
         result = this.getSubprotocol().toString() + " "
                 + this.filename + " "
-                + this.deg;
+                + this.deg
+                + "\r\n\r\n";
 
         return result;
     }
