@@ -1,6 +1,6 @@
 package Communication;
 
-public abstract class Message {
+public class Message {
 
     public enum MessageType {PUTCHUNK, STORED, GETCHUNK, DELETE, REMOVED, CHUNK, ORDER}
 
