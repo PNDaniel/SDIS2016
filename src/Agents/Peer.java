@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
+// TODO: Remove this.printDatabase() in the end
 public class Peer {
 
     private final int multicast_port = 8000;
@@ -27,7 +29,7 @@ public class Peer {
     private static ChannelMDB channel_mdb;
     private static ChannelMDR channel_mdr;
 
-    private ArrayList<Registry> database;
+    private HashSet<Registry> database = new HashSet<Registry>();
 
     public static void main(String[] args) throws UnknownHostException {
         if (
@@ -69,6 +71,7 @@ public class Peer {
 
         channel_mdr = new ChannelMDR(this, InetAddress.getByName(ip_mdr), port_mdr);
         channel_mdr.start();
+
     }
 
     public void backup(String filename, int repDeg) throws IOException {
@@ -80,12 +83,26 @@ public class Peer {
 
             PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), i, repDeg, body);
             channel_mdb.send(msg);
+
+            database.add(new Registry(FileUtils.hashConverter(filename), i, repDeg));
         }
+
+        this.printDatabase();
     }
 
-    public void stored(String _fileid, int chunkN) {
-        StoredMsg msg = new StoredMsg(this.id, _fileid, chunkN);
+    public void stored(String _fileid, int _chunkN, int _repDeg) {
+        // Send stored message
+        StoredMsg msg = new StoredMsg(this.id, _fileid, _chunkN);
         channel_mc.send(msg);
+
+        // Add chunk to the database
+        database.add(new Registry(_fileid, _chunkN, _repDeg));
+
+        this.printDatabase();
+    }
+
+    public void register(int _serverID, String _fileID, int _chunkN) {
+        //serverReg.add(new ServerRegistry(_serverID, _fileID, _chunkN));
     }
 
     public void restore(String filename) {
@@ -105,13 +122,10 @@ public class Peer {
         return id;
     }
 
-    public void insert(int _serverID, String _fileID, int _chunkN) {
-        database.add(new Registry(_serverID, _fileID, _chunkN));
-    }
-
-    public void select() {
-        for (int i = 0; i < database.size(); i++) {
-            System.out.println(database.get(i));
+    public void printDatabase() {
+        System.out.println("Database:");
+        for (Registry reg : database) {
+            System.out.println(reg);
         }
     }
 

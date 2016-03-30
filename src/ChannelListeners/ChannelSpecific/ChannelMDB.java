@@ -62,10 +62,12 @@ public class ChannelMDB extends Channel {
                             "\nBody:        " +
                             msg_parts[6]);
 
+                    // Save the chunk on a file
                     byte[] body = msg_parts[6].getBytes();
                     FileUtils.createChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), msg_parts[6].getBytes());
 
-                    this.getPeer().stored(msg_parts[3], Integer.parseInt(msg_parts[4]));
+                    // Save the chunk on the database
+                    this.getPeer().stored(msg_parts[3], Integer.parseInt(msg_parts[4]), Integer.parseInt(msg_parts[5]));
                 }
             }
         } catch (IOException ex) {
