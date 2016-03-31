@@ -35,6 +35,14 @@ public class Registry {
         return this.serverID;
     }
 
+    public boolean isBackedup() {
+        if (this.serverID.size() >= this.regDeg) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return "FileID: " + this.fileID +

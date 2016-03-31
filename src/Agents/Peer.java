@@ -13,7 +13,9 @@ import Utils.Registry;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
 // TODO: Remove this.printDatabase() in the end
@@ -21,6 +23,7 @@ public class Peer {
 
     private final int multicast_port = 8000;
     private final int body_limit = 64000;
+    private final int trials = 5;
 
     private static int id;
     private String multicast_ip;
@@ -81,10 +84,31 @@ public class Peer {
         for (int i = 0; i < chunkList.size(); i++) {
             body = chunkList.get(i);
 
-            PutchunkMsg msg = new PutchunkMsg(this.id, FileUtils.hashConverter(filename), i, repDeg, body);
-            channel_mdb.send(msg);
+            String _filename = FileUtils.hashConverter(filename);
 
-            database.add(new Registry(FileUtils.hashConverter(filename), i, repDeg));
+            database.add(new Registry(_filename, i, repDeg));
+
+            int j;
+            for (j = 0; j < trials; j++) {
+
+                PutchunkMsg msg = new PutchunkMsg(this.id, _filename, i, repDeg, body);
+                channel_mdb.send(msg);
+
+                try {
+                    Thread.sleep(400);
+                    for (Registry reg : database) {
+                        if (reg.getFileID().equals(_filename) && reg.getChunkN() == i) {
+                            if (reg.isBackedup()) {
+                                j = trials;
+                            } else {
+                                this.log("The following Chunk is on its " + j + " trial:\n" + reg.toString());
+                            }
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -127,6 +151,16 @@ public class Peer {
         for (Registry reg : database) {
             System.out.println(reg);
         }
+    }
+
+    public void log(String _log) {
+        System.out.println("▼ ----------------------------------- ▼\n" +
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) +
+                " - Peer #" +
+                this.id +
+                " says:\n" +
+                _log +
+                "\n▲ ----------------------------------- ▲");
     }
 
 }
