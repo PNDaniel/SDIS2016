@@ -95,13 +95,15 @@ public class Peer {
                 channel_mdb.send(msg);
 
                 try {
-                    Thread.sleep(400);
+                    Thread.sleep(1000);
                     for (Registry reg : database) {
                         if (reg.getFileID().equals(_filename) && reg.getChunkN() == i) {
                             if (reg.isBackedup()) {
                                 j = trials;
+                                this.log("The chunk was 100% backup. Check the database!");
+                                this.printDatabase();
                             } else {
-                                this.log("The following Chunk is on its " + j + " trial:\n" + reg.toString());
+                                this.log("The following Chunk is on its trial #" + j + 1 + ":\n" + reg.toString());
                             }
                         }
                     }
@@ -147,10 +149,11 @@ public class Peer {
     }
 
     public void printDatabase() {
-        System.out.println("Database:");
+        System.out.println("▼ ----------------------------------- ▼\nnew SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()) - Database:");
         for (Registry reg : database) {
             System.out.println(reg);
         }
+        System.out.println("▲ ----------------------------------- ▲");
     }
 
     public void log(String _log) {
