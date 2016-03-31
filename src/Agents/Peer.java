@@ -97,15 +97,10 @@ public class Peer {
         database.add(new Registry(_fileid, _chunkN, _repDeg));
     }
 
-    // TODO: WTF
     public void register(int _serverID, String _fileID, int _chunkN) {
         for (Registry reg : database) {
             if (reg.getFileID().equals(_fileID) && reg.getChunkN() == _chunkN) {
-                System.out.println("BEFORE");
-                System.out.println(reg);
                 reg.addServerID(_serverID);
-                System.out.println("AFTER");
-                System.out.println(reg);
             }
         }
     }

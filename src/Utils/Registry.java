@@ -37,14 +37,10 @@ public class Registry {
 
     @Override
     public String toString() {
-        String result = new String("FileID: " + this.fileID +
+        return "FileID: " + this.fileID +
                 "\nChunkN: " + this.chunkN +
                 "\nRepDeg: " + this.regDeg +
-                "\nServerID:");
-        for (Integer id : this.serverID) {
-            result.concat("\n " + id);
-        }
-        return result;
+                "\nServerID: " + this.serverID;
     }
 
 }
