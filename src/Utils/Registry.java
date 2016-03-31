@@ -51,4 +51,9 @@ public class Registry {
                 "\nServerID: " + this.serverID;
     }
 
+    @Override
+    public int hashCode() {
+        return this.fileID.hashCode() + this.chunkN + this.regDeg;
+    }
+
 }

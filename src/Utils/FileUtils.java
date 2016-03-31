@@ -57,26 +57,24 @@ public class FileUtils {
         return fileChunks;
     }
 
-    public static void createChunk(String fileID, int chunkNo, byte[] data) {
-
+    public static boolean createChunk(String fileID, int chunkNo, byte[] data) {
         String filename = fileID + "_" + chunkNo;
-        FileOutputStream file = null;
-        try {
-            file = new FileOutputStream(filename);
-
-            file.write(data);
-            file.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        File chunkfile = new File(filename);
+        if (chunkfile.exists()) {
+            return false;
+        } else {
+            FileOutputStream file = null;
+            try {
+                file = new FileOutputStream(filename);
+                file.write(data);
+                file.close();
+                return true;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
-
-        /*
-        byte data[] = ...
-        FileOutputStream out = new FileOutputStream("the-file-name");
-        out.write(data);
-        out.close();
-         */
     }
 }

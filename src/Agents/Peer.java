@@ -103,13 +103,18 @@ public class Peer {
                                 this.log("The chunk was 100% backup. Check the database!");
                                 this.printDatabase();
                             } else {
-                                this.log("The following Chunk is on its trial #" + j + 1 + ":\n" + reg.toString());
+                                this.log("The following Chunk is on its trial #" + (j + 1) + ":\n" + reg.toString());
                             }
                         }
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (j == trials) {
+                this.log("Maximum trials reached. The chunk was not 100% backup. Check the database!");
+                this.printDatabase();
             }
         }
     }
