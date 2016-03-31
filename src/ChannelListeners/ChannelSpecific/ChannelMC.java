@@ -40,6 +40,13 @@ public class ChannelMC extends Channel {
 
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
+
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 if (msg_parts[0].equals("STORED")) {
                     this.getPeer().register(Integer.parseInt(msg_parts[2]), msg_parts[3], Integer.parseInt(msg_parts[4]));
                 } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {

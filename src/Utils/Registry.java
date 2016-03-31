@@ -40,9 +40,9 @@ public class Registry {
         String result = new String("FileID: " + this.fileID +
                 "\nChunkN: " + this.chunkN +
                 "\nRepDeg: " + this.regDeg +
-                "\nServerID:\n");
-        for (int i = 0; i < this.serverID.size(); i++) {
-            result.concat(" " + this.serverID.get(i).toString());
+                "\nServerID:");
+        for (Integer id : this.serverID) {
+            result.concat("\n " + id);
         }
         return result;
     }

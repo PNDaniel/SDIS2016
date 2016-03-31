@@ -86,8 +86,6 @@ public class Peer {
 
             database.add(new Registry(FileUtils.hashConverter(filename), i, repDeg));
         }
-
-        this.printDatabase();
     }
 
     public void stored(String _fileid, int _chunkN, int _repDeg) {
@@ -97,12 +95,19 @@ public class Peer {
 
         // Add chunk to the database
         database.add(new Registry(_fileid, _chunkN, _repDeg));
-
-        this.printDatabase();
     }
 
+    // TODO: WTF
     public void register(int _serverID, String _fileID, int _chunkN) {
-        //serverReg.add(new ServerRegistry(_serverID, _fileID, _chunkN));
+        for (Registry reg : database) {
+            if (reg.getFileID().equals(_fileID) && reg.getChunkN() == _chunkN) {
+                System.out.println("BEFORE");
+                System.out.println(reg);
+                reg.addServerID(_serverID);
+                System.out.println("AFTER");
+                System.out.println(reg);
+            }
+        }
     }
 
     public void restore(String filename) {
