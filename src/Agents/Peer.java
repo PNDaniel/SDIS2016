@@ -144,6 +144,17 @@ public class Peer {
     }
 
     public void restore(String filename) {
+        String _filename = FileUtils.hashConverter(filename);
+
+        System.out.println("filename: " + filename);
+        for (Registry reg : database) {
+            if (reg.getFileID().equals(_filename)) {
+                System.out.println("Encontrou");
+            } else {
+                System.out.println("NOOOPE");
+            }
+        }
+
         GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), 0);
         channel_mc.send(msg);
     }

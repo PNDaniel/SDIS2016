@@ -56,7 +56,6 @@ public class ChannelMC extends Channel {
                 } else {
                     this.log("Received transmition:\n" + msg);
                 }
-
             }
 
         } catch (IOException ex) {
