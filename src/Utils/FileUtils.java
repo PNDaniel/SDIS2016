@@ -33,7 +33,6 @@ public class FileUtils {
         byte[] body = new byte[body_limit];
         int halt;
         if ((file.getChannel().size() % body_limit) == 0) {
-            //System.out.println("64KB");
             do {
                 halt = file.read(body);
                 if (halt != -1) {
@@ -93,7 +92,7 @@ public class FileUtils {
         }
     }
 
-    public static ArrayList<Integer> removeFile(String fileID, int id) {
+    public static ArrayList<Integer> removeFile(int id, String fileID) {
         ArrayList<Integer> chunks = new ArrayList<Integer>();
         File folder = new File(foldername + id);
         File[] listOfFiles = folder.listFiles();
@@ -122,4 +121,15 @@ public class FileUtils {
         return space;
     }
 
+    public static void removeChunk(int id, String fileID, int chunkN) {
+        File folder = new File(foldername + id);
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile() && listOfFiles[i].getName().equals(fileID + "_" + chunkN)) {
+                listOfFiles[i].delete();
+                break;
+            }
+        }
+    }
 }

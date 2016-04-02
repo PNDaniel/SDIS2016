@@ -6,13 +6,22 @@ public class Registry {
 
     private String fileID;
     private int chunkN;
-    private int regDeg;
+    private int repDeg;
     private ArrayList<Integer> serverID = new ArrayList<Integer>();
 
     public Registry(String _fileID, int _chunkN, int _repDeg) {
         this.fileID = _fileID;
         this.chunkN = _chunkN;
-        this.regDeg = _repDeg;
+        this.repDeg = _repDeg;
+    }
+
+    public Registry(String _fileID, int _chunkN) {
+        this.fileID = _fileID;
+        this.chunkN = _chunkN;
+    }
+
+    public void setRepDeg(int _repDeg) {
+        this.repDeg = _repDeg;
     }
 
     public void addServerID(int _serverID) {
@@ -27,8 +36,8 @@ public class Registry {
         return this.chunkN;
     }
 
-    public int getRegDeg() {
-        return this.regDeg;
+    public int getRepDeg() {
+        return this.repDeg;
     }
 
     public ArrayList<Integer> getServerID() {
@@ -36,7 +45,7 @@ public class Registry {
     }
 
     public boolean isBackedup() {
-        if (this.serverID.size() >= this.regDeg) {
+        if (this.serverID.size() >= this.repDeg) {
             return true;
         } else {
             return false;
@@ -47,13 +56,13 @@ public class Registry {
     public String toString() {
         return "FileID: " + this.fileID +
                 "\nChunkN: " + this.chunkN +
-                "\nRepDeg: " + this.regDeg +
+                "\nRepDeg: " + this.repDeg +
                 "\nServerID: " + this.serverID;
     }
 
     @Override
     public int hashCode() {
-        return this.fileID.hashCode() + this.chunkN + this.regDeg;
+        return this.fileID.hashCode() + this.chunkN + this.repDeg;
     }
 
 }

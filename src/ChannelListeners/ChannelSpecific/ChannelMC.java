@@ -41,20 +41,17 @@ public class ChannelMC extends Channel {
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
 
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                this.log("Received transmition:\n" + msg);
 
                 if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
-                    this.log(msg + "\nWhat? I sent this! Ignoring..");
+                    this.log(msg + "What? I sent this! Ignoring..");
                 } else if (msg_parts[0].equals("STORED")) {
                     this.getPeer().register(Integer.parseInt(msg_parts[2]), msg_parts[3], Integer.parseInt(msg_parts[4]));
                 } else if (msg_parts[0].equals("DELETE")) {
-                    this.getPeer().remove(msg_parts[3]);
-                } else {
-                    this.log("Received transmition:\n" + msg);
+                    this.getPeer().removeFile(msg_parts[3]);
+                } else if (msg_parts[0].equals("REMOVED")) {
+                    this.getPeer().deleteReg(msg_parts[3], Integer.parseInt(msg_parts[4]), Integer.parseInt(msg_parts[2]));
+                    this.getPeer().printDatabase();
                 }
             }
 

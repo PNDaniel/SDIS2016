@@ -4,14 +4,10 @@ import ChannelListeners.ChannelSpecific.ChannelMC;
 import ChannelListeners.ChannelSpecific.ChannelMDB;
 import ChannelListeners.ChannelSpecific.ChannelMDR;
 import ChannelListeners.ChannelSpecific.ChannelOrders;
-import Communication.Messages.DeleteMsg;
-import Communication.Messages.GetchunkMsg;
-import Communication.Messages.PutchunkMsg;
-import Communication.Messages.StoredMsg;
+import Communication.Messages.*;
 import Utils.FileUtils;
 import Utils.Registry;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -19,7 +15,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class Peer {
 
@@ -91,7 +91,8 @@ public class Peer {
 
             String _filename = FileUtils.hashConverter(filename);
 
-            database.add(new Registry(_filename, i, repDeg));
+            // Add chunk to the database
+            this.insert(_filename, i, repDeg);
 
             int j;
             for (j = 0; j < trials; j++) {
@@ -129,22 +130,48 @@ public class Peer {
         StoredMsg msg = new StoredMsg(this.id, _fileid, _chunkN);
         try {
             Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+
+            channel_mc.send(msg);
+
+            // Add chunk to the database
+            this.insert(_fileid, _chunkN, _repDeg);
+
+            // Add my server to the list of servers of this chunk
+            this.register(this.getServerID(), _fileid, _chunkN);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        channel_mc.send(msg);
+    }
 
-        // Add chunk to the database
-        database.add(new Registry(_fileid, _chunkN, _repDeg));
-
-        // Add my server to the list of servers of this chunk
-        this.register(this.getServerID(), _fileid, _chunkN);
+    public void insert(String _fileID, int _chunkN, int _repDeg) {
+        int n = 0;
+        for (Registry reg : database) {
+            if (reg.getFileID().equals(_fileID) && reg.getChunkN() == _chunkN) {
+                reg.setRepDeg(_repDeg);
+            } else {
+                n++;
+            }
+        }
+        if (n == database.size()) {
+            database.add(new Registry(_fileID, _chunkN, _repDeg));
+        }
     }
 
     public void register(int _serverID, String _fileID, int _chunkN) {
+        int n = 0;
         for (Registry reg : database) {
             if (reg.getFileID().equals(_fileID) && reg.getChunkN() == _chunkN) {
                 reg.addServerID(_serverID);
+            } else {
+                n++;
+            }
+        }
+        if (n == database.size()) {
+            database.add(new Registry(_fileID, _chunkN));
+            for (Registry reg : database) {
+                if (reg.getFileID().equals(_fileID) && reg.getChunkN() == _chunkN) {
+                    reg.addServerID(_serverID);
+                }
             }
         }
     }
@@ -170,22 +197,55 @@ public class Peer {
         channel_mc.send(msg);
     }
 
-    public void remove(String fileID) {
+    public void removeFile(String fileID) {
         ArrayList<Integer> chunks = new ArrayList<Integer>();
-        chunks = FileUtils.removeFile(fileID, this.id);
+        chunks = FileUtils.removeFile(this.id, fileID);
+
+        // Update database
+        for (Integer i : chunks) {
+            for (Registry reg : database) {
+                if (reg.getFileID().equals(fileID) && reg.getChunkN() == i) {
+                    reg.getServerID().remove(this.id);
+                }
+            }
+        }
+
         this.log("Removed chunks " + chunks + " that belong to " + fileID);
     }
 
+    public void deleteReg(String fileID, int chunkN, int serverID) {
+        // Update database
+        for (Registry reg : database) {
+            if (reg.getFileID().equals(fileID) && reg.getChunkN() == chunkN) {
+                reg.getServerID().remove(new Integer(serverID));
+                break;
+            }
+        }
+    }
+
+    public void removeChunk(String fileID, int chunkN) {
+        FileUtils.removeChunk(this.id, fileID, chunkN);
+        this.log("Removed chunk " + chunkN + " that belong to " + fileID);
+    }
+
     public void reclaim(int size) {
-        System.out.println("RECLAIM " + size);
-
-        System.out.println(FileUtils.spaceFolder(this.id));
-
+        System.out.println("RECLAIM " + size + "\n" + FileUtils.spaceFolder(this.id));
         // Verify how many space the chunks ocupy
-        if (FileUtils.spaceFolder(this.id) > size) {
-            // Remove chunks saved by other peers
-            System.out.println(FileUtils.spaceFolder(this.id));
-            this.printDatabase();
+        for (Registry reg : database) {
+            if (FileUtils.spaceFolder(this.id) > size) {
+                this.printDatabase();
+                if (reg.getServerID().contains(this.id) && reg.getServerID().size() > reg.getRepDeg()) {
+                    // Remove chunk
+                    this.removeChunk(reg.getFileID(), reg.getChunkN());
+                    // Send REMOVED message
+                    RemovedMsg msg = new RemovedMsg(this.id, reg.getFileID(), reg.getChunkN());
+                    channel_mc.send(msg);
+                    // Remove this server from database
+                    reg.getServerID().remove(this.id);
+                }
+            } else {
+                break;
+            }
         }
     }
 
