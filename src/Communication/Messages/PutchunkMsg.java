@@ -35,4 +35,7 @@ public class PutchunkMsg extends Message {
         return result;
     }
 
+    public byte[] getBody() {
+        return body;
+    }
 }

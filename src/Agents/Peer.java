@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 // TODO: Remove this.printDatabase() in the end
 public class Peer {
@@ -122,6 +123,11 @@ public class Peer {
     public void stored(String _fileid, int _chunkN, int _repDeg) {
         // Send stored message
         StoredMsg msg = new StoredMsg(this.id, _fileid, _chunkN);
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         channel_mc.send(msg);
 
         // Add chunk to the database
