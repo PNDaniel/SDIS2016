@@ -77,4 +77,17 @@ public class FileUtils {
             return false;
         }
     }
+
+    public static void removeFile(String fileID) {
+        File folder = new File(System.getProperty("user.dir"));
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile() && listOfFiles[i].getName().contains(fileID)) {
+                listOfFiles[i].delete();
+                break;
+            }
+        }
+    }
+
 }

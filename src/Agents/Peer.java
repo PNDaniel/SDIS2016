@@ -4,12 +4,14 @@ import ChannelListeners.ChannelSpecific.ChannelMC;
 import ChannelListeners.ChannelSpecific.ChannelMDB;
 import ChannelListeners.ChannelSpecific.ChannelMDR;
 import ChannelListeners.ChannelSpecific.ChannelOrders;
+import Communication.Messages.DeleteMsg;
 import Communication.Messages.GetchunkMsg;
 import Communication.Messages.PutchunkMsg;
 import Communication.Messages.StoredMsg;
 import Utils.FileUtils;
 import Utils.Registry;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -19,7 +21,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
-// TODO: Remove this.printDatabase() in the end
 public class Peer {
 
     private final int multicast_port = 8000;
@@ -148,7 +149,13 @@ public class Peer {
     }
 
     public void delete(String filename) {
-        System.out.println("DELETE " + filename);
+        DeleteMsg msg = new DeleteMsg(this.id, FileUtils.hashConverter(filename));
+        channel_mc.send(msg);
+    }
+
+    public void remove(String fileID) {
+        FileUtils.removeFile(fileID);
+        this.log("Removed chunks that belong to " + fileID);
     }
 
     public void reclaim(int size) {

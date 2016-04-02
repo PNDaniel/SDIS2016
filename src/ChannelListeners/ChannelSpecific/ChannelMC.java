@@ -47,10 +47,12 @@ public class ChannelMC extends Channel {
                     e.printStackTrace();
                 }
 
-                if (msg_parts[0].equals("STORED")) {
-                    this.getPeer().register(Integer.parseInt(msg_parts[2]), msg_parts[3], Integer.parseInt(msg_parts[4]));
-                } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
+                if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
                     this.log(msg + "\nWhat? I sent this! Ignoring..");
+                } else if (msg_parts[0].equals("STORED")) {
+                    this.getPeer().register(Integer.parseInt(msg_parts[2]), msg_parts[3], Integer.parseInt(msg_parts[4]));
+                } else if (msg_parts[0].equals("DELETE")) {
+                    this.getPeer().remove(msg_parts[3]);
                 } else {
                     this.log("Received transmition:\n" + msg);
                 }
