@@ -28,6 +28,7 @@ public class Peer {
     private final int trials = 5;
 
     private static int id;
+    private static String foldername;
     private String multicast_ip;
     private ChannelOrders channel_orders;
     private static ChannelMC channel_mc;
@@ -61,7 +62,9 @@ public class Peer {
 
     public Peer(int _id, String ip_mc, int port_mc, String ip_mdb, int port_mdb, String ip_mdr, int port_mdr) throws UnknownHostException {
 
-        id = _id;
+        this.id = _id;
+
+        FileUtils.createFolder(this.id);
 
         this.multicast_ip = new String("224.0.224." + this.id);
 
@@ -166,12 +169,13 @@ public class Peer {
 
     public void remove(String fileID) {
         ArrayList<Integer> chunks = new ArrayList<Integer>();
-        chunks = FileUtils.removeFile(fileID);
+        chunks = FileUtils.removeFile(fileID, this.id);
         this.log("Removed chunks " + chunks + " that belong to " + fileID);
     }
 
     public void reclaim(int size) {
         System.out.println("RECLAIM " + size);
+        // Verify how many space the chunks ocupy
     }
 
     public static int getServerID() {
@@ -179,7 +183,9 @@ public class Peer {
     }
 
     public void printDatabase() {
-        System.out.println("▼ ----------------------------------- ▼\nnew SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date()) - Database:");
+        System.out.println("▼ ----------------------------------- ▼\n" +
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) +
+                " - Database:");
         for (Registry reg : database) {
             System.out.println(reg);
         }

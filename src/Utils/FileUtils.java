@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class FileUtils {
 
     private static final int body_limit = 64000;
+    private static final String foldername = "Backup_";
 
     public static String hashConverter(String filename) {
         try {
@@ -57,8 +58,22 @@ public class FileUtils {
         return fileChunks;
     }
 
-    public static boolean createChunk(String fileID, int chunkNo, byte[] data) {
-        String filename = fileID + "_" + chunkNo;
+    public static void createFolder(int _id) {
+        File theDir = new File(foldername + _id);
+
+        if (!theDir.exists()) {
+            boolean result = false;
+            try {
+                theDir.mkdir();
+                result = true;
+            } catch (SecurityException err) {
+                err.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean createChunk(int id, String fileID, int chunkNo, byte[] data) {
+        String filename = foldername + id + "/" + fileID + "_" + chunkNo;
         File chunkfile = new File(filename);
         if (chunkfile.exists()) {
             return false;
@@ -78,9 +93,9 @@ public class FileUtils {
         }
     }
 
-    public static ArrayList<Integer> removeFile(String fileID) {
+    public static ArrayList<Integer> removeFile(String fileID, int id) {
         ArrayList<Integer> chunks = new ArrayList<Integer>();
-        File folder = new File(System.getProperty("user.dir"));
+        File folder = new File(System.getProperty("user.dir/" + foldername));
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
