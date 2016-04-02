@@ -165,8 +165,9 @@ public class Peer {
     }
 
     public void remove(String fileID) {
-        FileUtils.removeFile(fileID);
-        this.log("Removed chunks that belong to " + fileID);
+        ArrayList<Integer> chunks = new ArrayList<Integer>();
+        chunks = FileUtils.removeFile(fileID);
+        this.log("Removed chunks " + chunks + " that belong to " + fileID);
     }
 
     public void reclaim(int size) {

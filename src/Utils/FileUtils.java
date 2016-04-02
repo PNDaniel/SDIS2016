@@ -78,16 +78,19 @@ public class FileUtils {
         }
     }
 
-    public static void removeFile(String fileID) {
+    public static ArrayList<Integer> removeFile(String fileID) {
+        ArrayList<Integer> chunks = new ArrayList<Integer>();
         File folder = new File(System.getProperty("user.dir"));
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile() && listOfFiles[i].getName().contains(fileID)) {
+                chunks.add(Integer.parseInt(listOfFiles[i].getName().split("_")[1]));
                 listOfFiles[i].delete();
                 break;
             }
         }
+        return chunks;
     }
 
 }
