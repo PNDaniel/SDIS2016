@@ -95,7 +95,7 @@ public class FileUtils {
 
     public static ArrayList<Integer> removeFile(String fileID, int id) {
         ArrayList<Integer> chunks = new ArrayList<Integer>();
-        File folder = new File(System.getProperty("user.dir/" + foldername));
+        File folder = new File(foldername + id);
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -106,6 +106,20 @@ public class FileUtils {
             }
         }
         return chunks;
+    }
+
+    public static int spaceFolder(int id) {
+        File folder = new File(foldername + id);
+        File[] listOfFiles = folder.listFiles();
+        int space = 0;
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                space += listOfFiles[i].length();
+            }
+        }
+
+        return space;
     }
 
 }

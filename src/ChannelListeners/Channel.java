@@ -47,7 +47,6 @@ public abstract class Channel extends Thread {
             // (in the form of bytes) and send it.
             DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
             serverSocket.send(msgPacket);
-            System.out.println("Am I here");
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {

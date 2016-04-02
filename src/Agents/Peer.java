@@ -136,6 +136,9 @@ public class Peer {
 
         // Add chunk to the database
         database.add(new Registry(_fileid, _chunkN, _repDeg));
+
+        // Add my server to the list of servers of this chunk
+        this.register(this.getServerID(), _fileid, _chunkN);
     }
 
     public void register(int _serverID, String _fileID, int _chunkN) {
@@ -175,7 +178,15 @@ public class Peer {
 
     public void reclaim(int size) {
         System.out.println("RECLAIM " + size);
+
+        System.out.println(FileUtils.spaceFolder(this.id));
+
         // Verify how many space the chunks ocupy
+        if (FileUtils.spaceFolder(this.id) > size) {
+            // Remove chunks saved by other peers
+            System.out.println(FileUtils.spaceFolder(this.id));
+            this.printDatabase();
+        }
     }
 
     public static int getServerID() {
