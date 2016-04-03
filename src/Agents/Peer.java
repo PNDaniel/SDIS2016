@@ -188,9 +188,10 @@ public class Peer {
 
         this.filenameToRestore = filename;
 
-        channel_mdr.toggle(true);
-
         try {
+            System.out.println("MDR goes true.");
+            channel_mdr.toggle(true);
+
             Thread.sleep(400);
 
             for (Registry reg : database) {
@@ -239,6 +240,7 @@ public class Peer {
         }
 
         if (n == chunkList.size()) {
+            channel_mdr.toggle(false);
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(this.filenameToRestore);
@@ -256,6 +258,7 @@ public class Peer {
             }
             try {
                 out.close();
+                chunksToFile.clear();
             } catch (IOException e) {
                 e.printStackTrace();
             }
