@@ -32,29 +32,25 @@ public class FileUtils {
         FileInputStream file = new FileInputStream(filename);
         byte[] body = new byte[body_limit];
         int halt;
+
         if ((file.getChannel().size() % body_limit) == 0) {
-            //System.out.println("64KB");
             do {
                 halt = file.read(body);
                 if (halt != -1) {
                     fileChunks.add(Arrays.copyOf(body, halt));
-
-                    //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
                 }
             } while (halt != -1);
             byte[] last = new byte[0];
             fileChunks.add(Arrays.copyOf(last, 0));
         } else {
-            //System.out.println("65KB");
             do {
                 halt = file.read(body);
                 if (halt != -1) {
                     fileChunks.add(Arrays.copyOf(body, halt));
-                    //System.out.println("FUCKING BODY 2.2.2.2.2.2.2.2:" + body);
-                    //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
                 }
             } while (halt != -1);
         }
+
         file.close();
 
         return fileChunks;
@@ -96,14 +92,19 @@ public class FileUtils {
         }
     }
 
-    public static byte[] sendFile(String filename) throws IOException {
+    public static byte[] sendFile(String filename) {
         int halt;
-        System.out.println("Filename: " + filename);
-        FileInputStream file = new FileInputStream(filename);
+        FileInputStream file = null;
         byte[] body = new byte[body_limit];
-        file.read(body);
-
-        file.close();
+        try {
+            file = new FileInputStream(filename);
+            file.read(body);
+            file.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return body;
     }
 

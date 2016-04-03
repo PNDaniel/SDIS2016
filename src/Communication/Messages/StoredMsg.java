@@ -36,10 +36,14 @@ public class StoredMsg extends Message {
                 + this.getVersion() + " "
                 + this.getSenderID() + " "
                 + this.getFileID() + " "
-                + this.chunkN + " "
-                + "\r\n\r\n";
+                + this.chunkN + " \r\n\r\n";
 
         return result;
     }
 
+    @Override
+    public byte[] getBytes() {
+        byte[] header = this.toString().getBytes();
+        return header;
+    }
 }

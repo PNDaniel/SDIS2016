@@ -51,11 +51,11 @@ public class ChannelMC extends Channel {
                     this.getPeer().removeFile(msg_parts[3]);
                 } else if (msg_parts[0].equals("REMOVED")) {
                     this.getPeer().deleteReg(msg_parts[3], Integer.parseInt(msg_parts[4]), Integer.parseInt(msg_parts[2]));
-                    this.getPeer().printDatabase();
                 } else if (msg_parts[0].equals("GETCHUNK")) {
-                    this.getPeer().searchChunk(msg_parts[3], Integer.parseInt(msg_parts[4]));
+                    this.getPeer().sendChunk(msg_parts[3], Integer.parseInt(msg_parts[4]));
                 }
             }
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }

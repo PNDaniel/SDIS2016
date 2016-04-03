@@ -36,7 +36,7 @@ public abstract class Channel extends Thread {
         return this.port;
     }
 
-    /*public void send(Message msg) {
+    public void send(Message msg) {
         // Open a new DatagramSocket, which will be used to send the data.
         try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
 
@@ -45,33 +45,7 @@ public abstract class Channel extends Thread {
 
             // Create a packet that will contain the data
             // (in the form of bytes) and send it.
-            System.out.println("Converting to string " + msg.toByte().toString());
-            System.out.println("Converting to bytes " + msg.toString().getBytes());
-            //DatagramPacket msgPacket = new DatagramPacket(msg.toByte(), msg.toByte().length, this.getIp(), this.getPort());
-            DatagramPacket msgPacket = new DatagramPacket(msg.toByte(), msg.toByte().length, this.getIp(), this.getPort());
-            serverSocket.send(msgPacket);
-            try {
-                Thread.sleep(400);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }*/
-
-    public void send1(byte[] msg) {
-        // Open a new DatagramSocket, which will be used to send the data.
-        try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
-
-            //Join the Multicast group.
-            serverSocket.joinGroup(this.getIp());
-
-            // Create a packet that will contain the data
-            // (in the form of bytes) and send it.
-            //System.out.println("Converting to string " + msg);
-            //System.out.println("Converting to bytes " + msg.getBytes());
-            DatagramPacket msgPacket = new DatagramPacket(msg, msg.length, this.getIp(), this.getPort());
+            DatagramPacket msgPacket = new DatagramPacket(msg.getBytes(), msg.getBytes().length, this.getIp(), this.getPort());
             serverSocket.send(msgPacket);
             try {
                 Thread.sleep(400);

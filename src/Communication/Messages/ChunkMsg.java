@@ -24,9 +24,19 @@ public class ChunkMsg extends Message {
                 + this.getVersion() + " "
                 + this.getSenderID() + " "
                 + this.getFileID() + " "
-                + this.chunkN + " "
-                + this.body;
+                + this.chunkN + "\r\n\r\n";
+
         return result;
     }
 
+    @Override
+    public byte[] getBytes() {
+        byte[] header = this.toString().getBytes();
+        byte[] bytes = new byte[header.length + this.body.length];
+
+        System.arraycopy(header, 0, bytes, 0, header.length);
+        System.arraycopy(this.body, 0, bytes, header.length, this.body.length);
+
+        return bytes;
+    }
 }

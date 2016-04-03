@@ -1,6 +1,6 @@
 package Communication;
 
-public class Message {
+public abstract class Message {
 
     public enum MessageType {PUTCHUNK, STORED, GETCHUNK, DELETE, REMOVED, CHUNK, ORDER}
 
@@ -52,5 +52,7 @@ public class Message {
     public String getFileID() {
         return this.fileID;
     }
+
+    public abstract byte[] getBytes();
 
 }

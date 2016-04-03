@@ -18,9 +18,14 @@ public class DeleteMsg extends Message {
         result = this.getMsgType().toString() + " "
                 + this.getVersion() + " "
                 + this.getSenderID() + " "
-                + this.getFileID() + "\r\n\r\n";
+                + this.getFileID() + " \r\n\r\n";
 
         return result;
     }
 
+    @Override
+    public byte[] getBytes() {
+        byte[] header = this.toString().getBytes();
+        return header;
+    }
 }

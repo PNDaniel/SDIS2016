@@ -21,7 +21,7 @@ public class ChannelMDR extends Channel {
         // Create a buffer of bytes, which will be used to store
         // the incoming bytes containing the information from the server.
         // Since the message is small here, 256 bytes should be enough.
-        byte[] buf = new byte[256];
+        byte[] buf = new byte[100000];
 
         // Create a new Multicast socket (that will allow other sockets/programs
         // to join it as well.
@@ -35,9 +35,31 @@ public class ChannelMDR extends Channel {
                 DatagramPacket msgPacket = new DatagramPacket(buf, buf.length);
                 clientSocket.receive(msgPacket);
 
+                // Header handling
                 String msg = new String(buf, 0, buf.length);
                 msg = msg.replace("\r\n\r\n", " ");
                 String[] msg_parts = msg.split(" ");
+
+                // Body handling
+                int start;
+                for (start = 0; start < buf.length; start++) {
+                    String aux = new String(buf, start, 4);
+                    if (aux.equals("\r\n\r\n")) {
+                        break;
+                    }
+                }
+
+                start += 4;
+
+                int end = buf.length - 1;
+                while (buf[end] == 0) {
+                    end--;
+                }
+
+                end++;
+
+                byte[] body = new byte[end - start];
+                System.arraycopy(buf, start, body, 0, end - start);
 
                 if (!msg_parts[0].equals("CHUNK")) {
                     this.log("Invalid message in the MDR: " + msg_parts[0]);
@@ -51,16 +73,15 @@ public class ChannelMDR extends Channel {
                             "\nFileID:      " +
                             msg_parts[3] +
                             "\nChunkNo:     " +
-                            msg_parts[4] +
-                            "\nBody:        " +
-                            msg_parts[5]);
+                            msg_parts[4]);
 
-                    // TODO Have to create the chunk here
+                    this.getPeer().addChunk(msg_parts[3], Integer.parseInt(msg_parts[4]), body);
                 }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
     }
 
 }

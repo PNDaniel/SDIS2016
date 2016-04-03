@@ -51,6 +51,7 @@ public class ChannelOrders extends Channel {
                 } else if (msg_parts[0].equals("RECLAIM")) {
                     this.getPeer().reclaim(Integer.parseInt(msg_parts[1]));
                 }
+
             }
 
         } catch (IOException ex) {

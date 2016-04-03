@@ -27,4 +27,10 @@ public class GetchunkMsg extends Message {
 
         return result;
     }
+
+    @Override
+    public byte[] getBytes() {
+        byte[] header = this.toString().getBytes();
+        return header;
+    }
 }
