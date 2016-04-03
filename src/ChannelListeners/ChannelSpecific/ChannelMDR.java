@@ -11,6 +11,8 @@ import java.net.MulticastSocket;
 
 public class ChannelMDR extends Channel {
 
+    private volatile boolean runnable = false;
+
     public ChannelMDR(Peer _peer, InetAddress _ip, int _port) {
         super(_peer, _ip, _port);
     }
@@ -61,7 +63,9 @@ public class ChannelMDR extends Channel {
                 byte[] body = new byte[end - start];
                 System.arraycopy(buf, start, body, 0, end - start);
 
-                if (!msg_parts[0].equals("CHUNK")) {
+                if (!runnable) {
+                    this.log("Got something on MDR but I'm not listening...");
+                } else if (!msg_parts[0].equals("CHUNK")) {
                     this.log("Invalid message in the MDR: " + msg_parts[0]);
                 } else if (!msg_parts[1].equals("1.0")) {
                     this.log("What? Version " + msg_parts[1] + "?! No hablo español...");
@@ -82,6 +86,10 @@ public class ChannelMDR extends Channel {
             ex.printStackTrace();
         }
 
+    }
+
+    public void toggle(boolean _runnable) {
+        this.runnable = _runnable;
     }
 
 }

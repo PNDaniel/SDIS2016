@@ -188,6 +188,14 @@ public class Peer {
 
         this.filenameToRestore = filename;
 
+        channel_mdr.toggle(true);
+
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for (Registry reg : database) {
             if (reg.getFileID().equals(_filename)) {
                 GetchunkMsg msg = new GetchunkMsg(this.id, _filename, reg.getChunkN());
@@ -198,7 +206,6 @@ public class Peer {
 
     public void sendChunk(String fileID, int chunkN) {
         try {
-            System.out.println("SEND CHUNK!");
             Thread.sleep(ThreadLocalRandom.current().nextInt(401));
             ChunkMsg msg = new ChunkMsg(this.id, fileID, chunkN, FileUtils.sendFile("Backup_" + this.id + "/" + fileID + "_" + chunkN));
             channel_mdr.send(msg);
@@ -250,6 +257,7 @@ public class Peer {
             }
             try {
                 out.close();
+                channel_mdr.toggle(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
