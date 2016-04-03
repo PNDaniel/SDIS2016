@@ -76,6 +76,7 @@ public class FileUtils {
 
     public static boolean createChunk(int id, String fileID, int chunkNo, byte[] data) {
         String filename = foldername + id + "/" + fileID + "_" + chunkNo;
+        //System.out.println("Filename & Folder: " + filename);
         File chunkfile = new File(filename);
         if (chunkfile.exists()) {
             return false;

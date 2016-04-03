@@ -48,8 +48,10 @@ public class ChannelMDB extends Channel {
                 } else if (!msg_parts[1].equals("1.0")) {
                     this.log("What? Version " + msg_parts[1] + "?! No hablo español...");
                 } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
-                    this.log(msg + "\nWhat? I sent this! Ignoring..");
+                    //this.log(msg + "\nWhat? I sent this! Ignoring..");
                 } else {
+                    //System.out.println("THE FUCKING SERVER THAT SENT MSG:" + msg_parts[2]);
+                    //System.out.println("THIS FUCKING SERVER MSG:" + this.getPeer().getServerID());
                     this.log("Received transmition:\nServerID:    " +
                             msg_parts[2] +
                             "\nFileID:      " +
@@ -68,6 +70,8 @@ public class ChannelMDB extends Channel {
                     if (FileUtils.createChunk(this.getPeer().getServerID(), msg_parts[3], Integer.parseInt(msg_parts[4]), body)) {
                         // Save the chunk on the database
                         this.getPeer().stored(msg_parts[3], Integer.parseInt(msg_parts[4]), Integer.parseInt(msg_parts[5]));
+                    } else {
+                        System.out.println("This file was already backed up before.");
                     }
                 }
             }
@@ -75,5 +79,4 @@ public class ChannelMDB extends Channel {
             ex.printStackTrace();
         }
     }
-
 }

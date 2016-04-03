@@ -36,7 +36,7 @@ public abstract class Channel extends Thread {
         return this.port;
     }
 
-    public void send(Message msg) {
+    /*public void send(Message msg) {
         // Open a new DatagramSocket, which will be used to send the data.
         try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
 
@@ -58,9 +58,9 @@ public abstract class Channel extends Thread {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
+    }*/
 
-   /* public void send1(String msg) {
+    public void send1(byte[] msg) {
         // Open a new DatagramSocket, which will be used to send the data.
         try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
 
@@ -69,9 +69,9 @@ public abstract class Channel extends Thread {
 
             // Create a packet that will contain the data
             // (in the form of bytes) and send it.
-            System.out.println("Converting to string " + msg);
-            System.out.println("Converting to bytes " + msg.getBytes());
-            DatagramPacket msgPacket = new DatagramPacket(msg.getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            //System.out.println("Converting to string " + msg);
+            //System.out.println("Converting to bytes " + msg.getBytes());
+            DatagramPacket msgPacket = new DatagramPacket(msg, msg.length, this.getIp(), this.getPort());
             serverSocket.send(msgPacket);
             try {
                 Thread.sleep(400);
@@ -81,7 +81,7 @@ public abstract class Channel extends Thread {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }*/
+    }
 
     public void log(String _log) {
         System.out.println("▼ ----------------------------------- ▼\n" +

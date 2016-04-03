@@ -99,10 +99,18 @@ public class Peer {
             int j;
             for (j = 0; j < trials; j++) {
 
-                PutchunkMsg msg = new PutchunkMsg(this.id, _filename, i, repDeg, body);
-                channel_mdb.send(msg);
-                //String msg = "PUTCHUNK" + " " +  1.0 + " " + this.id + " " +  _filename + " " + i + " " + repDeg + "\r\n\r\n" + new String(body);
-                //channel_mdb.send1(msg);
+                //PutchunkMsg msg = new PutchunkMsg(this.id, _filename, i, repDeg, body);
+                //channel_mdb.send(msg);
+                //System.out.println("Server FUCKING ID: " + this.id);
+                String msg = "PUTCHUNK" + " " + "1.0" + " " + this.id + " " + _filename + " " + i + " " + repDeg + "\r\n\r\n";
+
+                byte[] temp1 = msg.getBytes();
+
+                byte[] last = new byte[temp1.length + body.length];
+                System.arraycopy(temp1, 0, last, 0, temp1.length);
+                System.arraycopy(body, 0, last, temp1.length, body.length);
+
+                channel_mdb.send1(last);
 
                 try {
                     Thread.sleep(1000);
@@ -131,11 +139,13 @@ public class Peer {
 
     public void stored(String _fileid, int _chunkN, int _repDeg) {
         // Send stored message
-        StoredMsg msg = new StoredMsg(this.id, _fileid, _chunkN);
+        //StoredMsg msg = new StoredMsg(this.id, _fileid, _chunkN);
         try {
-            Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+            String msg = "STORED" + " " + 1.0 + " " + this.id + " " + _fileid + " " + _chunkN + " " + _repDeg + "\r\n\r\n";
+            channel_mc.send1(msg.getBytes());
 
-            channel_mc.send(msg);
+            Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+            //channel_mc.send(msg);
 
             // Add chunk to the database
             this.insert(_fileid, _chunkN, _repDeg);
@@ -183,9 +193,10 @@ public class Peer {
     public void restore(String filename) {
         int chunkNo = 0;
 
-        GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), chunkNo);
-        //String msg = "GETCHUNK" + " " +  1.0 + " " + this.id + " " +  filename + " " + chunkNo + " " + "\r\n\r\n";
-        channel_mc.send(msg);
+        //GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), chunkNo);
+        //channel_mc.send(msg);
+        String msg = "GETCHUNK" + " " + 1.0 + " " + this.id + " " + filename + " " + chunkNo + " " + "\r\n\r\n";
+        channel_mc.send1(msg.getBytes());
     }
 
     public void searchChunk(String fileID, int chunkNo) {
@@ -253,8 +264,8 @@ public class Peer {
                     // Remove chunk
                     this.removeChunk(reg.getFileID(), reg.getChunkN());
                     // Send REMOVED message
-                    RemovedMsg msg = new RemovedMsg(this.id, reg.getFileID(), reg.getChunkN());
-                    channel_mc.send(msg);
+                    //RemovedMsg msg = new RemovedMsg(this.id, reg.getFileID(), reg.getChunkN());
+                    //channel_mc.send(msg);
                     // Remove this server from database
                     reg.getServerID().remove(this.id);
                 }
