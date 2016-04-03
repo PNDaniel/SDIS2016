@@ -15,6 +15,20 @@ public class StoredMsg extends Message {
         this(1.0, _senderID, _fileID, _chunkN);
     }
 
+    public byte[] toByte() {
+        String temp = new String();
+
+        temp = this.getMsgType().toString() + " "
+                + this.getVersion() + " "
+                + this.getSenderID() + " "
+                + this.getFileID() + " "
+                + this.chunkN + " "
+                + "\r\n\r\n";
+        byte[] last = temp.getBytes();
+
+        return last;
+    }
+
     public String toString() {
         String result = new String();
 

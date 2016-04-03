@@ -20,8 +20,12 @@ public class ChunkMsg extends Message {
     public String toString() {
         String result = new String();
 
-        // TODO: Build string ready to deliver
-
+        result = this.getMsgType().toString() + " "
+                + this.getVersion() + " "
+                + this.getSenderID() + " "
+                + this.getFileID() + " "
+                + this.chunkN + " "
+                + this.body;
         return result;
     }
 

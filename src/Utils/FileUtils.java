@@ -33,10 +33,12 @@ public class FileUtils {
         byte[] body = new byte[body_limit];
         int halt;
         if ((file.getChannel().size() % body_limit) == 0) {
+            //System.out.println("64KB");
             do {
                 halt = file.read(body);
                 if (halt != -1) {
                     fileChunks.add(Arrays.copyOf(body, halt));
+
                     //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
                 }
             } while (halt != -1);
@@ -48,6 +50,7 @@ public class FileUtils {
                 halt = file.read(body);
                 if (halt != -1) {
                     fileChunks.add(Arrays.copyOf(body, halt));
+                    //System.out.println("FUCKING BODY 2.2.2.2.2.2.2.2:" + body);
                     //System.out.println("BodyCreator:" + new String(Arrays.copyOf(body, halt)));
                 }
             } while (halt != -1);
@@ -92,6 +95,17 @@ public class FileUtils {
         }
     }
 
+    public static byte[] sendFile(String filename) throws IOException {
+        int halt;
+        System.out.println("Filename: " + filename);
+        FileInputStream file = new FileInputStream(filename);
+        byte[] body = new byte[body_limit];
+        file.read(body);
+
+        file.close();
+        return body;
+    }
+
     public static ArrayList<Integer> removeFile(int id, String fileID) {
         ArrayList<Integer> chunks = new ArrayList<Integer>();
         File folder = new File(foldername + id);
@@ -132,4 +146,5 @@ public class FileUtils {
             }
         }
     }
+
 }

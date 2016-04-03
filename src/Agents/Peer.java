@@ -8,6 +8,7 @@ import Communication.Messages.*;
 import Utils.FileUtils;
 import Utils.Registry;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -88,7 +89,8 @@ public class Peer {
 
         for (int i = 0; i < chunkList.size(); i++) {
             body = chunkList.get(i);
-
+            //System.out.println("le address:" + body);
+            //System.out.println("FUCKING BODY:" + new String(body));
             String _filename = FileUtils.hashConverter(filename);
 
             // Add chunk to the database
@@ -99,6 +101,8 @@ public class Peer {
 
                 PutchunkMsg msg = new PutchunkMsg(this.id, _filename, i, repDeg, body);
                 channel_mdb.send(msg);
+                //String msg = "PUTCHUNK" + " " +  1.0 + " " + this.id + " " +  _filename + " " + i + " " + repDeg + "\r\n\r\n" + new String(body);
+                //channel_mdb.send1(msg);
 
                 try {
                     Thread.sleep(1000);
@@ -177,24 +181,35 @@ public class Peer {
     }
 
     public void restore(String filename) {
-        String _filename = FileUtils.hashConverter(filename);
+        int chunkNo = 0;
 
-        System.out.println("filename: " + filename);
-        for (Registry reg : database) {
-            if (reg.getFileID().equals(_filename)) {
-                System.out.println("Encontrou");
-            } else {
-                System.out.println("NOOOPE");
+        GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), chunkNo);
+        //String msg = "GETCHUNK" + " " +  1.0 + " " + this.id + " " +  filename + " " + chunkNo + " " + "\r\n\r\n";
+        channel_mc.send(msg);
+    }
+
+    public void searchChunk(String fileID, int chunkNo) {
+        File folder = new File(System.getProperty("user.dir"));
+        File[] listOfFiles = folder.listFiles();
+        String chunk = fileID + "_" + chunkNo;
+        byte[] body = null;
+        try {
+            body = FileUtils.sendFile(chunk);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile() && listOfFiles[i].getName().equals(chunk)) {
+                ChunkMsg msg = new ChunkMsg(this.id, fileID, chunkNo, body);
+                //channel_mdr.send(msg);
+                break;
             }
         }
-
-        GetchunkMsg msg = new GetchunkMsg(this.id, FileUtils.hashConverter(filename), 0);
-        channel_mc.send(msg);
     }
 
     public void delete(String filename) {
         DeleteMsg msg = new DeleteMsg(this.id, FileUtils.hashConverter(filename));
-        channel_mc.send(msg);
+        //channel_mc.send(msg);
     }
 
     public void removeFile(String fileID) {

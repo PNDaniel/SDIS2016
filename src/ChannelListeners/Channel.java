@@ -45,7 +45,10 @@ public abstract class Channel extends Thread {
 
             // Create a packet that will contain the data
             // (in the form of bytes) and send it.
-            DatagramPacket msgPacket = new DatagramPacket(msg.toString().getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            System.out.println("Converting to string " + msg.toByte().toString());
+            System.out.println("Converting to bytes " + msg.toString().getBytes());
+            //DatagramPacket msgPacket = new DatagramPacket(msg.toByte(), msg.toByte().length, this.getIp(), this.getPort());
+            DatagramPacket msgPacket = new DatagramPacket(msg.toByte(), msg.toByte().length, this.getIp(), this.getPort());
             serverSocket.send(msgPacket);
             try {
                 Thread.sleep(400);
@@ -56,6 +59,29 @@ public abstract class Channel extends Thread {
             ex.printStackTrace();
         }
     }
+
+   /* public void send1(String msg) {
+        // Open a new DatagramSocket, which will be used to send the data.
+        try (MulticastSocket serverSocket = new MulticastSocket(this.getPort())) {
+
+            //Join the Multicast group.
+            serverSocket.joinGroup(this.getIp());
+
+            // Create a packet that will contain the data
+            // (in the form of bytes) and send it.
+            System.out.println("Converting to string " + msg);
+            System.out.println("Converting to bytes " + msg.getBytes());
+            DatagramPacket msgPacket = new DatagramPacket(msg.getBytes(), msg.toString().getBytes().length, this.getIp(), this.getPort());
+            serverSocket.send(msgPacket);
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }*/
 
     public void log(String _log) {
         System.out.println("▼ ----------------------------------- ▼\n" +

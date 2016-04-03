@@ -36,9 +36,28 @@ public class ChannelMDR extends Channel {
                 clientSocket.receive(msgPacket);
 
                 String msg = new String(buf, 0, buf.length);
-                this.log("Received transmition:\n" + msg);
-            }
+                msg = msg.replace("\r\n\r\n", " ");
+                String[] msg_parts = msg.split(" ");
 
+                if (!msg_parts[0].equals("CHUNK")) {
+                    this.log("Invalid message in the MDR: " + msg_parts[0]);
+                } else if (!msg_parts[1].equals("1.0")) {
+                    this.log("What? Version " + msg_parts[1] + "?! No hablo español...");
+                } else if (Integer.parseInt(msg_parts[2]) == this.getPeer().getServerID()) {
+                    this.log(msg + "\nWhat? I sent this! Ignoring..");
+                } else {
+                    this.log("Received transmition:\nServerID:    " +
+                            msg_parts[2] +
+                            "\nFileID:      " +
+                            msg_parts[3] +
+                            "\nChunkNo:     " +
+                            msg_parts[4] +
+                            "\nBody:        " +
+                            msg_parts[5]);
+
+                    // TODO Have to create the chunk here
+                }
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

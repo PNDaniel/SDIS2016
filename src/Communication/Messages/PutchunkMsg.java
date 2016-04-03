@@ -1,6 +1,5 @@
 package Communication.Messages;
 
-import Communication.InvalidMessage;
 import Communication.Message;
 
 public class PutchunkMsg extends Message {
@@ -20,7 +19,24 @@ public class PutchunkMsg extends Message {
         this(1.0, _senderID, _fileID, _chunkN, _repDeg, _body);
     }
 
-    @Override
+    public byte[] toByte() {
+        String temp = new String();
+
+        temp = this.getMsgType().toString() + " "
+                + this.getVersion() + " "
+                + this.getSenderID() + " "
+                + this.getFileID() + " "
+                + this.chunkN + " "
+                + this.repDeg + "\r\n\r\n";
+        byte[] temp1 = temp.getBytes();
+
+        byte[] last = new byte[temp1.length + body.length];
+        System.arraycopy(temp1, 0, last, 0, temp1.length);
+        System.arraycopy(body, 0, last, temp1.length, body.length);
+
+        return last;
+    }
+
     public String toString() {
         String result = new String();
 
@@ -33,9 +49,5 @@ public class PutchunkMsg extends Message {
                 + this.body;
 
         return result;
-    }
-
-    public byte[] getBody() {
-        return body;
     }
 }
