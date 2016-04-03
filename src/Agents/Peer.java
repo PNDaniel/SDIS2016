@@ -191,16 +191,16 @@ public class Peer {
         channel_mdr.toggle(true);
 
         try {
-            Thread.sleep(ThreadLocalRandom.current().nextInt(401));
+            Thread.sleep(400);
+
+            for (Registry reg : database) {
+                if (reg.getFileID().equals(_filename)) {
+                    GetchunkMsg msg = new GetchunkMsg(this.id, _filename, reg.getChunkN());
+                    channel_mc.send(msg);
+                }
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-
-        for (Registry reg : database) {
-            if (reg.getFileID().equals(_filename)) {
-                GetchunkMsg msg = new GetchunkMsg(this.id, _filename, reg.getChunkN());
-                channel_mc.send(msg);
-            }
         }
     }
 
@@ -231,7 +231,6 @@ public class Peer {
 
         int n = 0;
         for (Integer i : chunkList) {
-            System.out.println(i);
             if (i == n) {
                 n++;
             } else {
@@ -257,7 +256,6 @@ public class Peer {
             }
             try {
                 out.close();
-                channel_mdr.toggle(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
