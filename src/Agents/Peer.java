@@ -66,11 +66,11 @@ public class Peer {
         if (
                 args[0].matches("\\d*") &&
                         args[1].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-                        args[2].matches("\\d{4}") &&
+                        args[2].matches("\\d{4,5}") &&
                         args[3].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-                        args[4].matches("\\d{4}") &&
+                        args[4].matches("\\d{4,5}") &&
                         args[5].matches("(\\d{1,3}.){3}\\d{1,3}") &&
-                        args[6].matches("\\d{4}")) {
+                        args[6].matches("\\d{4,5}")) {
             new Peer(
                     Integer.parseInt(args[0]),
                     args[1],
